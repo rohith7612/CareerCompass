@@ -1,0 +1,119 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCompass</title>
+    {% tailwind_css %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<nav class="fixed w-full z-50 bg-gray-900 bg-opacity-90 shadow-lg">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center">
+            <a href="{% url 'homepage' %}" class="text-2xl font-bold text-white flex items-center">
+                CareerCompass
+            </a>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex space-x-6 items-center">
+            <a href="{% url 'roadmaps' %}" class="nav-link text-gray-300 hover:text-white">Roadmaps</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">Best Practices</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">Contact</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
+            <a href="{% url 'users:register' %}" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                Sign-up
+            </a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <div class="md:hidden">
+            <button id="mobile-menu-toggle" class="hamburger-icon focus:outline-none">
+                <div class="bar bg-white h-1 w-6 my-1"></div>
+                <div class="bar bg-white h-1 w-6 my-1"></div>
+                <div class="bar bg-white h-1 w-6 my-1"></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-800 mobile-menu">
+        <div class="px-4 pt-2 pb-4 space-y-2">
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Roadmaps</a>
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Best Practices</a>
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Contact</a>
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">About</a>
+            <a href="{% url 'users:register' %}" class="block text-center bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
+                Sign-up
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Existing Content (Shifted down to account for fixed navigation) -->
+<header class="hero-bg pt-24 pb-16 px-4 text-center">
+    <!-- Rest of the previous content remains the same -->
+</header>
+
+<script>
+    // Mobile Menu Toggle JavaScript
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuToggle.addEventListener('click', () => {
+        mobileMenuToggle.classList.toggle('active');
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
+<body class="bg-gray-900 text-white font-sans">
+    <header class="hero-bg py-16 px-4 text-center">
+        <div class="container mx-auto">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6" style="animation: fadeInUp 1s ease-out;">
+                CareerCompass
+            </h1>
+            
+            
+            <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto animate__animated animate__fadeInUp" style="animation: fadeInUp 1s ease-out 0.5s both;">
+               Navigate your passion,discover your path.<br>
+               CareerCompass is with you. 
+            </p>
+            <div class="flex justify-center space-x-4" >
+                <a href="#" class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors pulse-button" style="animation: fadeInUp 1s ease-out 1s both;">
+                    Get Started
+                </a>
+                <a href="#" class="border border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-black transition-all" style="animation: fadeInUp 1s ease-out 1s both;">
+                    View Roadmaps
+                </a>
+            </div>
+        </div>
+    </header>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const element = document.querySelector('.animate__fadeInUp');
+          element.classList.add('animate__animated');
+        });
+      </script>
+      <main>
+        {% block content%}
+        {% endblock %}
+      </main>
+      
+    
+
+    <footer class="bg-gray-800 py-12 text-center">
+        <div class="container mx-auto">
+            <p class="text-gray-400">&copy; 2024 CareerCompass - Community Driven Roadmaps. <br>
+                Community created roadmaps, best practices, projects, articles, resources and journeys to help you choose your path and grow in your career.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
