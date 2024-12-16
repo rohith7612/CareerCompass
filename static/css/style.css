@@ -1,0 +1,133 @@
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.hero-bg {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.floating-icon {
+    animation: float 4s ease-in-out infinite;
+}
+
+.pulse-button {
+    animation: pulse 2s infinite;
+}
+
+.roadmap-card {
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+.roadmap-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+.nav-link {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Mobile Menu Toggle */
+@keyframes menuToggle {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+/* Flex container for centering the grid */
+
+.mobile-menu {
+    animation: menuToggle 0.5s ease;
+}
+
+/* Hamburger Icon Animation */
+.hamburger-icon .bar {
+    transition: all 0.3s ease;
+}
+
+.hamburger-icon.active .bar:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-icon.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-icon.active .bar:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+.container {
+    flex-wrap: wrap;
+    justify-content: center; 
+    align-items: center; 
+    gap: 20px;
+}
+
+section{
+    display: flex;
+}
+
+.roadmap-card {
+    width: 300px; 
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+.roadmap-card:hover {
+transform: scale(1.05);
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+border-color: #3b82f6; 
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.banner{
+    display: block;
+    width: 100%;
+    max-width: 800px;
+}

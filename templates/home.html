@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<section class="container mx-auto py-16 px-4" id="roadmaps">
+    <a href="{% url 'frontend' %}">
+    <div class="grid md:grid-cols-3 gap-8" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-blue-400 floating-icon">🚀</div>
+            <h2 class="text-2xl font-bold mb-4">Frontened Development</h2>
+            <p class="text-gray-300">
+                Learn frontend technologies with detailed roadmaps.
+            </p>
+        </div>
+    </a>
+        <a href="{% url 'DevOps' %}">
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-green-400 floating-icon">💻</div>
+            <h2 class="text-2xl font-bold mb-4">DevOps</h2>
+            <p class="text-gray-300">
+                Learn the art of deploying, scaling, and managing modern web infrastructure.
+            </p>
+        </div>
+    </a>
+
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-purple-400 floating-icon">🤖</div>
+            <h2 class="text-2xl font-bold mb-4">AI & Data Science</h2>
+            <p class="text-gray-300">
+                Get comprehensive guides for machine learning, AI, and data science.
+            </p>
+        </div>
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-red-400 floating-icon">🌐</div>
+            <h2 class="text-2xl font-bold mb-4">Cloud Computing</h2>
+            <p class="text-gray-300">
+                Master cloud technologies and distributed systems architecture.
+            </p>
+        </div>
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-yellow-400 floating-icon">🔒</div>
+            <h2 class="text-2xl font-bold mb-4">Cybersecurity</h2>
+            <p class="text-gray-300">
+                Learn ethical hacking, network security, and protection strategies.
+            </p>
+        </div>
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-pink-400 floating-icon">📱</div>
+            <h2 class="text-2xl font-bold mb-4">Mobile Development</h2>
+            <p class="text-gray-300">
+                Create amazing mobile applications for iOS and Android.
+            </p>
+        </div>
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-indigo-400 floating-icon">🧠</div>
+            <h2 class="text-2xl font-bold mb-4">Machine Learning</h2>
+            <p class="text-gray-300">
+                Deep dive into neural networks and advanced ML algorithms.
+            </p>
+        </div>
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-teal-400 floating-icon">⚙️</div>
+            <h2 class="text-2xl font-bold mb-4">Backend Engineering</h2>
+            <p class="text-gray-300">
+                Master server-side technologies and system design principles.
+            </p>
+        </div>
+        <div class="roadmap-card bg-gray-800 p-6 rounded-lg" style="opacity: 1; transform: translateY(0); transition: 0.55s ease-out;">
+            <div class="text-5xl mb-4 text-orange-400 floating-icon">🌈</div>
+            <h2 class="text-2xl font-bold mb-4">Full Stack</h2>
+            <p class="text-gray-300">
+                Comprehensive guide to becoming a versatile full-stack developer.
+            </p>
+        </div>
+    </div>
+</section>
+{%endblock%}
