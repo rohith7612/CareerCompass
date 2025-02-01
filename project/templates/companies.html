@@ -1,0 +1,233 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCompass</title>
+    {% tailwind_css %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<nav class="fixed w-full z-50 bg-gray-900 bg-opacity-90 shadow-lg">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center">
+            <a href="{% url 'homepage' %}" class="text-2xl font-bold text-white flex items-center">
+                CareerCompass
+            </a>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex space-x-6 items-center">
+            <a href="{% url 'homepage' %}" class="nav-link text-gray-300 hover:text-white">Home</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">Companies</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">Contact</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
+            {% if user.is_authenticated %}
+            <form class="logout" action="{% url 'users:logout' %}" method="post">
+                {% csrf_token %}
+                <span>Welcome , {{ user.username }}!</span> &nbsp;
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">Logout</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <div class="md:hidden">
+            <button id="mobile-menu-toggle" class="hamburger-icon focus:outline-none">
+                <div class="bar bg-white h-1 w-6 my-1"></div>
+                <div class="bar bg-white h-1 w-6 my-1"></div>
+                <div class="bar bg-white h-1 w-6 my-1"></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-800 mobile-menu">
+        <div class="px-4 pt-2 pb-4 space-y-2">
+            <a href="home.html" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Home</a>
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Companies</a>
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Contact</a>
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">About</a>
+            <a href="#" class="block text-center bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
+                Login
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Existing Content (Shifted down to account for fixed navigation) -->
+<header class="hero-bg pt-24 pb-5 px-4 text-center">
+    <!-- Rest of the previous content remains the same -->
+    <marquee behavior="scroll" direction="left" scrollamount="5" loop="infinite">
+        <h1 class="text-2xl md:text-5xl mb-6" style="animation: fadeInUp 1s ease-out;">
+            Companies asked questions.Get the previous year questions of all the companies
+        </h1>
+    </marquee>
+    
+        
+    </h1>
+</header>
+
+<script>
+    // Mobile Menu Toggle JavaScript
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuToggle.addEventListener('click', () => {
+        mobileMenuToggle.classList.toggle('active');
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
+<body class="bg-gray-900 text-white font-sans">
+    <section class="container mx-auto py-16 px-4" id="companies">
+        <div class="grid md:grid-cols-3 gap-8">
+            <a href="#">
+                <div class="roadmap-card bg-gray-50 p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-30 w-30 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/amazon-logo.png' %}" 
+                             alt="Amazon Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Explore Amazon's coding interview questions and system design problems.
+                    </p>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="roadmap-card bg-white p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-25 w-25 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/google-logo.png' %}" 
+                             alt="Google Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Practice Google's algorithm and data structure focused questions.
+                    </p>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="roadmap-card bg-white p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-25 w-25 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/microsoft-logo.png' %}" 
+                             alt="Microsoft Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Learn from Microsoft's problem-solving and optimization questions.
+                    </p>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="roadmap-card bg-white p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-20 w-20 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/apple-logo.png' %}" 
+                             alt="Apple Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Master Apple's coding challenges and platform-specific questions.
+                    </p>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="roadmap-card bg-white p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-25 w-25 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/meta-logo.png' %}" 
+                             alt="Meta Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Practice Meta's algorithmic and social network related problems.
+                    </p>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="roadmap-card bg-white p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-25 w-25 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/netflix-logo.png' %}" 
+                             alt="Netflix Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Solve Netflix's streaming optimization and system design challenges.
+                    </p>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="roadmap-card bg-white p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-25 w-25 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/adobe-logo.png' %}" 
+                             alt="Adobe Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Practice Adobe's UI/UX and rendering optimization problems.
+                    </p>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="roadmap-card bg-white p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-25 w-25 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/airbnb-logo.png' %}" 
+                             alt="Airbnb Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Explore Airbnb's frontend and booking system related questions.
+                    </p>
+                </div>
+            </a>
+
+            <a href="#">
+                <div class="roadmap-card bg-white p-6 rounded-lg hover:transform hover:scale-105 transition-transform">
+                    <div class="h-25 w-25 mb-4 mx-auto">
+                        <img src="{% static 'images/companies/uber-logo.png' %}" 
+                             alt="Uber Logo" 
+                             class="w-full h-full object-contain"
+                        >
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4"></h2>
+                    <p class="text-black">
+                        Practice Uber's location services and routing algorithm questions.
+                    </p>
+                </div>
+            </a>
+        </div>
+    </section>
+</body>
+    
+
+    <footer class="bg-gray-800 py-12 text-center">
+        <div class="container mx-auto">
+            <p class="text-gray-400">&copy; 2024 CareerCompass - Community Driven Roadmaps. <br>
+                Community created roadmaps, best practices, projects, articles, resources and journeys to help you choose your path and grow in your career.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -135,7 +135,7 @@
             
              <h2>Sign Up<br> CareerCompass</h2>
             <div class="form-group">
-                <label for="name">Full Name</label>
+                <label for="name">Username</label>
                 {{form.username}}
             </div>
             <div class="form-group">
@@ -150,9 +150,21 @@
                 <label for="confirm-password">Confirm Password</label>
                 {{form.password2}}
             </div>
+            {% if form.errors %}
+  <ul class="error-messages">
+    {% for field, errors in form.errors.items %}
+      <li>
+        <strong>{{ field|capfirst }}:</strong>
+        {% for error in errors %}
+          {{ error }}
+        {% endfor %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
             <button type="submit" class="btn">Sign Up</button>
             <div class="login-link">
-                Already have an account? <a href="{% url 'login' %}">Log in</a>
+                Already have an account? <a href="{% url 'users:login' %}">Log in</a>
             </div>
         </form>
     </div>

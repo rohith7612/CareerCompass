@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<nav class="fixed w-full z-50 bg-gray-900 bg-opacity-90 shadow-lg">
+ <nav class="fixed w-full z-50 bg-gray-900 bg-opacity-90 shadow-lg">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
         <!-- Logo -->
         <div class="flex items-center">
@@ -24,13 +24,24 @@
         <!-- Desktop Navigation -->
         <div class="hidden md:flex space-x-6 items-center">
             <a href="{% url 'roadmaps' %}" class="nav-link text-gray-300 hover:text-white">Roadmaps</a>
-            <a href="#" class="nav-link text-gray-300 hover:text-white">Best Practices</a>
+            <a href="{% url 'companies' %}" class="nav-link text-gray-300 hover:text-white">Companies</a>
             <a href="#" class="nav-link text-gray-300 hover:text-white">Contact</a>
             <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
-            <a href="{% url 'users:register' %}" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
-                Sign-up
-            </a>
+            
+            
         </div>
+        {% if user.is_authenticated %}
+            <form class="logout" action="{% url 'users:logout' %}" method="post">
+                {% csrf_token %}
+                <span>Welcome , <u>{{ user.username }}</u>!</span> &nbsp;
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">Logout</button>
+                
+            </form>
+        {% else%}
+            <a href="{% url 'users:register' %}" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                Signup / Login
+            </a>
+        {% endif %}
 
         <!-- Mobile Menu Toggle -->
         <div class="md:hidden">
@@ -46,7 +57,7 @@
     <div id="mobile-menu" class="hidden md:hidden bg-gray-800 mobile-menu">
         <div class="px-4 pt-2 pb-4 space-y-2">
             <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Roadmaps</a>
-            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Best Practices</a>
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Companies</a>
             <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Contact</a>
             <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">About</a>
             <a href="{% url 'users:register' %}" class="block text-center bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
@@ -54,7 +65,7 @@
             </a>
         </div>
     </div>
-</nav>
+</nav> 
 
 <!-- Existing Content (Shifted down to account for fixed navigation) -->
 <header class="hero-bg pt-24 pb-16 px-4 text-center">
@@ -87,7 +98,7 @@
                 <a href="#" class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors pulse-button" style="animation: fadeInUp 1s ease-out 1s both;">
                     Get Started
                 </a>
-                <a href="#" class="border border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-black transition-all" style="animation: fadeInUp 1s ease-out 1s both;">
+                <a href="{% url 'roadmaps' %}" class="border border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-black transition-all" style="animation: fadeInUp 1s ease-out 1s both;">
                     View Roadmaps
                 </a>
             </div>
@@ -105,9 +116,6 @@
         {% block content%}
         {% endblock %}
       </main>
-      
-    
-
     <footer class="bg-gray-800 py-12 text-center">
         <div class="container mx-auto">
             <p class="text-gray-400">&copy; 2024 CareerCompass - Community Driven Roadmaps. <br>

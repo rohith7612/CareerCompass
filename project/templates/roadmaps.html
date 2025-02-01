@@ -21,12 +21,16 @@
         <!-- Desktop Navigation -->
         <div class="hidden md:flex space-x-6 items-center">
             <a href="{% url 'homepage' %}" class="nav-link text-gray-300 hover:text-white">Home</a>
-            <a href="#" class="nav-link text-gray-300 hover:text-white">Best Practices</a>
+            <a href="{% url 'companies' %}" class="nav-link text-gray-300 hover:text-white">Companies</a>
             <a href="#" class="nav-link text-gray-300 hover:text-white">Contact</a>
             <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
-            <a href="{% url 'login' %}" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
-                Login
-            </a>
+            {% if user.is_authenticated %}
+            <form class="logout" action="{% url 'users:logout' %}" method="post">
+                {% csrf_token %}
+                <span>Welcome , {{ user.username }}!</span> &nbsp;
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">Logout</button>
+            </form>
+            {% endif %}
         </div>
 
         <!-- Mobile Menu Toggle -->
@@ -43,7 +47,7 @@
     <div id="mobile-menu" class="hidden md:hidden bg-gray-800 mobile-menu">
         <div class="px-4 pt-2 pb-4 space-y-2">
             <a href="home.html" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Home</a>
-            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Best Practices</a>
+            <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Companies</a>
             <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">Contact</a>
             <a href="#" class="block py-2 text-gray-300 hover:bg-gray-700 rounded">About</a>
             <a href="#" class="block text-center bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
@@ -54,8 +58,10 @@
 </nav>
 
 <!-- Existing Content (Shifted down to account for fixed navigation) -->
-<header class="hero-bg pt-24 pb-16 px-4 text-center">
+<header class="hero-bg pt-20 pb-5 px-4 text-center">
     <!-- Rest of the previous content remains the same -->
+    
+    
 </header>
 
 <script>
@@ -90,13 +96,16 @@
                 </p>
             </div>
         </a>
+        <a href="{% url 'Ai' %}">
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-purple-400 floating-icon">🤖</div>
-                <h2 class="text-2xl font-bold mb-4">AI & Data Science</h2>
+                <h2 class="text-2xl font-bold mb-4">AI Engineering</h2>
                 <p class="text-gray-300">
-                    Get comprehensive guides for machine learning, AI, and data science.
+                    Get comprehensive guides for Aritificial intelligence.
                 </p>
             </div>
+        </a>
+        <a href="{% url 'Cloud' %}">
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-red-400 floating-icon">🌐</div>
                 <h2 class="text-2xl font-bold mb-4">Cloud Computing</h2>
@@ -104,6 +113,8 @@
                     Master cloud technologies and distributed systems architecture.
                 </p>
             </div>
+        </a>
+        <a href="{%url 'cybersecurity' %}">
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-yellow-400 floating-icon">🔒</div>
                 <h2 class="text-2xl font-bold mb-4">Cybersecurity</h2>
@@ -111,6 +122,8 @@
                     Learn ethical hacking, network security, and protection strategies.
                 </p>
             </div>
+        </a>
+        <a href="{% url 'mobile' %}">
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-pink-400 floating-icon">📱</div>
                 <h2 class="text-2xl font-bold mb-4">Mobile Development</h2>
@@ -118,6 +131,7 @@
                     Create amazing mobile applications for iOS and Android.
                 </p>
             </div>
+            </a>
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-indigo-400 floating-icon">🧠</div>
                 <h2 class="text-2xl font-bold mb-4">Machine Learning</h2>
@@ -132,6 +146,7 @@
                     Master server-side technologies and system design principles.
                 </p>
             </div>
+            <a href="{%url 'fullstack' %}">
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-orange-400 floating-icon">🌈</div>
                 <h2 class="text-2xl font-bold mb-4">Full Stack</h2>
@@ -139,6 +154,7 @@
                     Comprehensive guide to becoming a versatile full-stack developer.
                 </p>
             </div>
+        </a>
         </div>
     </section>
     

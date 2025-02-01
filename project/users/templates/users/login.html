@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - CareerCompass</title>
+    <title>Login - CareerCompass</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
@@ -32,23 +32,23 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100%;
             padding: 20px;
         }
 
-        .signup-form {
+        .login-form {
             background-color: #2D3748;
             padding: 40px;
-            border-radius: 20px;
+            border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             animation: fadeInUp 0.5s ease-out;
         }
 
-        .signup-form h2 {
+        .login-form h2 {
             text-align: center;
-            color: #2563EB;
+            color: var(--primary-color);
             margin-bottom: 30px;
         }
 
@@ -95,18 +95,18 @@
             transform: translateY(-3px);
         }
 
-        .login-link {
+        .signup-link {
             text-align: center;
             margin-top: 20px;
         }
 
-        .login-link a {
+        .signup-link a {
             color: var(--primary-color);
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
-        .login-link a:hover {
+        .signup-link a:hover {
             color: var(--secondary-color);
         }
 
@@ -122,51 +122,52 @@
         }
 
         @media (max-width: 480px) {
-            .signup-form {
+            .login-form {
                 padding: 30px;
             }
         }
     </style>
 </head>
 <body>
-    {% csrf_token %}
     <div class="container">
-        <form class="signup-form" action="/users/register/" method="POST">
-            <h2>Sign Up<br> CareerCompass</h2>
+        <!-- Modified form to use the backend login endpoint -->
+        <form class="login-form" action="/users/login/" method="POST">
+            {% csrf_token %}
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{request.GET.next}}"/>
+            {% endif %}
+            <h2>Login <br> CareerCompass</h2>
             <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
+                <label for="username">Username</label>
+                {{form.username}}
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                {{form.password}}
             </div>
-            <div class="form-group">
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm_password" required>
-            </div>
-            <button type="submit" class="btn">Sign Up</button>
-            <div class="login-link">
-                Already have an account? <a href="{% url 'login' %}">Log in</a>
+            <button type="submit" class="btn">Log In</button>
+            
+            <div class="signup-link">
+                Don't have an account? <a href="{% url 'users:register' %}">Sign up</a>
             </div>
         </form>
     </div>
 
     <script>
-        // Basic client-side password validation
-        const form = document.querySelector('form');
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('confirm-password');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const form = document.querySelector('.login-form');
+            const inputs = form.querySelectorAll('input');
 
-        form.addEventListener('submit', function(e) {
-            if (password.value !== confirmPassword.value) {
-                e.preventDefault();
-                alert('Passwords do not match!');
-            }
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-5px)';
+                    this.parentElement.style.transition = 'transform 0.3s ease';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
+            });
         });
     </script>
 </body>
