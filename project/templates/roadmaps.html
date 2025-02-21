@@ -22,7 +22,7 @@
         <div class="hidden md:flex space-x-6 items-center">
             <a href="{% url 'homepage' %}" class="nav-link text-gray-300 hover:text-white">Home</a>
             <a href="{% url 'companies' %}" class="nav-link text-gray-300 hover:text-white">Companies</a>
-            <a href="#" class="nav-link text-gray-300 hover:text-white">Contact</a>
+            <a href="#" class="nav-link text-gray-300 hover:text-white">CodeSavant</a>
             <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
             {% if user.is_authenticated %}
             <form class="logout" action="{% url 'users:logout' %}" method="post">
