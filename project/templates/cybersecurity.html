@@ -3,10 +3,767 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cybersecurity</title>
+    <title>Frontend Development Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .roadmap-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .roadmap-node {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            background: #1a1a2e;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .roadmap-node:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .roadmap-node.completed {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #1a1a2e, #064e3b);
+        }
+
+        .roadmap-path {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(to bottom, #3b82f6, #7c3aed);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .roadmap-path.animated {
+            animation: pathGrow 0.8s ease-out forwards;
+            transform-origin: top;
+        }
+
+        .node-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+        }
+
+        .roadmap-node:hover .node-icon::before {
+            transform: rotate(45deg) translate(100%, 100%);
+        }
+
+        .svg-icon {
+            width: 48px;
+            height: 48px;
+            margin-left: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .svg-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #3b82f6;
+        }
+
+        .content-area {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-area.expanded {
+            opacity: 1;
+            max-height: 300px;
+            padding-top: 1rem;
+        }
+
+        .resource-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            background: linear-gradient(135deg, #3b82f6, #1a1a2e);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .resource-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .resource-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #3b82f6;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); }
+        }
+
+        @keyframes pathGrow {
+            from { transform: translateX(-50%) scaleY(0); }
+            to { transform: translateX(-50%) scaleY(1); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff, #e5e7eb);
+            border-radius: 6px;
+            transition: width 1s ease-out;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .title-glow {
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Custom Checkbox Styles */
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #10b981;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .custom-checkbox .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .svg-placeholder {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #3b82f6;
+            text-align: center;
+            line-height: 1.2;
+            margin-left: 1rem;
+        }
+    </style>
 </head>
-<body>
-    <h1 style="text-align: center;">Cybersecurity</h1>
-    <iframe frameborder="0" style="width:100%;height:3162px;" src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=cybersecurity.html#R%3Cmxfile%3E%3Cdiagram%20name%3D%22Page-1%22%20id%3D%222864l7CpncR7zPNePEzY%22%3E7V1bd5u4Fv41ebSXJEDAY5o2bc5pp1njzqTzdBaxFZuJDV6A42R%2B%2FRE3GySBwRFC7po%2BtAWDsPf%2BtC%2Ff3hJXxs3m9XPkbVffwgVZXyGweL0yPl4hZAAA6D%2Fpmbf8DMQI52eWkb8ozh1PzPx%2FSHGyuHG58xckrl2YhOE68bf1k%2FMwCMg8qZ3zoijc1y97Ctf1p269JeFOzObemj%2F74C%2BSVX7WQfbx%2FBfiL1flkyF28082Xnlx8UvilbcI95VTxqcr4yYKwyT%2F3%2Bb1hqxT6ZVyye%2B7bfj08MUiEiRdbkiiv75%2Bffj5x99v%2Fvb38PaF%2FHVrTIpRXrz1rvjBs8SLEnrq5u2RRDGZ7yI%2FeUuP6YNIVPyU5K2Uz37lJ2S29ebp8Z6C4Mr4ECdR%2BHwQF%2F2hH6JwFyxI%2BkUgPXry1%2BubcB1G2RAGgQuL2If7Kp%2B42DY8TD%2Fhf2v5xUmUkNfKqeK3fybhhiRR%2BsWLT7FZ6OGtDrD9UavIQvm5VUWjplOAqQDS8jDyUdb0P4W4s8M%2FYhJ9f%2Fw7hSMCa%2B%2BRzons1ptws90lqRDBbO6TgMoMgVsqGW9Df5e3jvMnrf3gOb9hlSQpzK%2FTB6Hb%2FX4%2FnYc7qpTIm4bRkp5aEy8K6L%2FzeLKNwmXkbTZ%2BsJz87b14tblSPH8mfF4rQFBFqAWg5Gqf6t5ZmCLtO%2BjRwLK0j62pxejf5AAAXcADAOPeAKCHFQy0YuI3kuzD6Jlq7QwsbLaJX0JhTmXhP%2FlzL%2FHDgN59G%2BQjC3BQfeZJABhDA%2BDp6QnN5yIALPAjtmQBwHAYACDX5i2AiaVYAAEAutljk7PHN2GUmols7t6E1GZsk5izwtEq3DzuYqHwRSrSQCEmqNtji7fH0DZ5bRxOSjDI37fUlCb53Ju9xQnZnG%2BCQ2qCwz2JJru4dJO1Sdf4rFY8WNJnnwTVGUZNc65Ac64cT3r2PMLcPProJV4q%2BiTazZNdRPhJNJI0MROXiMRpQyni7CY7m5Pd9XoZ0jBwtdFGaMg068bcEEjNsKVIrcl6fM1nPvjqB7vX03ZjnV4mctbZJZy9qIzaqi1naP%2BsKEBzEOOfTZFKTYFHUGlXXG5uFHoCs2cqtl%2FCM7u4PrcMkUVCjsA1o6FMUpms1eKizcYLFvn8I7rYJQiNujk3BXkmxHKizI6yE%2BT4WfxBz10vaL7oU7kUhkgTIQLLZoyBhSEnxgOzokaMiBfjkR35QU23Ns4RgjJeKL2j7fAgtAQzeDjpGZz07o%2BERTqJvWC585aSwjJNUkwMXB61xrAk0%2F1bsiqncls4ss2uK%2BKRRTgXRyHV0doVbEqPQySoxMSMQhyBNS6VJD%2BmaNLRBy9epSHDPPK3yYGGadNWvKLPibPrp%2Bm9Il3lo57WlJY5pcWkQTYW%2BU05aVAPTd2nKf1slUmpTUd0AsXTjT%2BPwjh8SlJqjp4kwWSXMnEZLxDngwgnGfOQdvVhHdXnOPWJZovoHEOOxzk7eId8Zltx4Tz5epF5lFknZxxbUOdAxqAu6LeSeQZH8Z5k1fx4HhbzZp7NHfpXPnuicLGbp6Tn7bEcJZpGTY9tx8Tg%2BbOi4MOuT0DXQfwEdEbOniGfPt%2F6Edl7osx5rJCB4aVdkSVDcgTZTWqIT37vPs7oUHf3M22kVv76Q3VNJLYyh1IjNj7v%2FfP%2BN21wZlmYrUhCAVfgqqQKEJ%2FjPpBHzqBepF90ICvuA39Qy4qtQV3j94fr2X3GF2zp36W%2BmxxjuPfibZGiUSeZ1vjTISdJuJ0kpIE4Fj%2BiXe%2Fyi7wSVAaBWacxhKYYyyGBzvZpiC%2FZ5nPmz906IJH36K%2F9xNen3OQipt4kLJ24cnLijiK0OBFmBiere4eLQ4I8vvBM22WEJ4SknDS1sY0oetsmKXe2XXUJrBs6hrJBBOaDH71dd%2FLT0XHiZyaBhYYgcYKWnIri%2BcaGz2A%2FBZkqNaLvWdJNLEpJxdmOcnM4ud3%2F904XgQlCQVMgMkdO1t5RYnyq9sWLVxrZYge7XaQGoZyIrpvYDD5X46tE9BrsbbaZGMAPMl8F1KYtZcUII9FOTP5nmQLeCQoc4xntlU2O8cGPSLzyyp7HNq%2B4Ly89FkBicTjNDNqu%2FaqQtImjLczoBovKgZLKUj249W8koenNOvST0%2FraHK4tOMIlSSZx2qpOJcUrjR26XWtIR625LmPcLFHtypBj3Po0LG%2BoBFr1FdArimn1GIbPDWTtYZh23WiZmZqYSQOwiEoAyqtVH3ZRmvPPdlQq7TrahlES7%2F3lkkTTgCSpqrJ7U0O4y4ogx4iyXmTkHtGuPy3Lwi6wGf0Jy1Ujs%2BUGnxbfrMPd4mpYPm6kfMsWxW5Yjgqa5sv1w4wTZtOM8fbx1Nt4%2F4RB4YHai1Giodu1rWdd12LYIkc0U6zBZkqj5v7J6aGOukuvbizPh1QcLz7Zn9ap8KHtWrV11KoJDTZ1csrO2tr0Gyy66GgB%2BbT98829bPsnQaCWXW%2BZha6o7dNSmcAbfAJ%2Ft6C%2FMM9Eqxno9XxO4jQt%2FeYF3pKk3n8Iv6IoEeVaRxEQENyoLEW%2FMxXtuKqLZwWud8kq1cZcq85b12E5FQRKyrtmGFSSdybipDebfddYZFBE3qms45p8t22FhSpWomWrRC82fLRwXeaoREl1kkvKwJqCkNndp2%2FtgUfWurld74LnQ8zxvyzmSCLPDw5kai3KOI7armM9MyuDLbNT6Au6GuR4wrMDC5NPre6Cub%2FIXB%2F4ncRbOju0WVRiAtBFqNBRWbQ1%2BSWWP1YR8VIBftkFiUaVAstk6yvIMAQUKFYqP76Ul%2B4Psfa9fF%2BIaoR2G3kbkvY2XnKFALML%2FKjJFnUeCBylxBrBXRo5AGSD0je0mW4%2FDgsik%2F7PJ%2FNJdt%2FED57CaJO50EmZMU5XyWYtsObc89pBIb8bVYZRt7m9E4SVtjLOVkhG381%2BnFZjusJtugxf0raH%2Bq42nLqOA7brydVRTw63yQmyEG%2Fnxl6bb%2FHZ0OeP979r4y2gw8hQUMpU2h9l8Z2s9yQgh1Wb4AeJpfnbccJ5zGXtWIBc6MpZQdJYQM4a9663W1ambdYlfHoiQey%2FkKMvyGP97f55EsbzbUNduelZ7VBAOhqeg0k5KM8UKM8euXnK4rPi45IRmVNIgkRNzEjUFk0HW2Vri8U3un4LH%2F010U96rsFxMkL5lUJWIz8%2B57xevKTR%2FuIq69b255cc3tv1QhFyRMG9Paz9%2Fuat915WorkOvPVb7HfYzin2grjclSUNDg9WfJJ3zqZsTURe0qhxQoKlHxASpXvsbcpniYx70xdpB4iWFUDTYJg21xBUipzBeh06Ti4%2Bm%2F49Vxo9%2BemoNl0sFATsBkaOzYsVATmF1Y4y5KttH%2F2ln3jpnbdhlEY5kkyUFBvPMY1CZEqKOhqb8ZltF09TCnNUmBv21tubu1m6coezJqJntGtSfno6UpMI7KDhsZvyMZ%2FPftj569Sr34dR8hSu%2FfCSHXu9180AIh1glaVtzOfDNI9ap1%2F6iYoAgf%2BEj5dc22IlDkWhlFqJI07inHxp1PRyEFzWmnud7r9NTwRhQK%2F5QIJFeeZxHc6f01OvfvKTHoOpadvF8V%2FpEFMAnOwW%2Bu3zC6zyMP0ccJrKPvr4WnyWH72VR3TU40fpQfWTexoYUCmRqDjXqMGYxoNz0iKl4jr605ckabmukB1Z1LYe5%2FEQkTU1%2BS%2Bk9i1Eus1upbL13ioXbEM%2FKLaKrar%2BMP470MAn0lLQwGj0gA2rioxWfTbqjpF1B2UiNTrZvN6n546z38ZssQ%2FaTPkj%2F%2B7Ffe1DMe7Trg%2BUI5UbSBpOeMagHScLL17VDu69hE7MILPNCBg9DMvRcKQ7YVRNx9R0nX7mIz1ircQRnQCgCj5TS2b1tjlP63B%2FHfh5TelUjNwNuh3skDmSHeKAypIHsGTcTyBeGlB5akYZUEscVTHUz%2FM1Ik0uqsyOqLIUo0oMKcTsw2kABjj5gHJhxLdEjAqjI3IuEkhYDyCx7w2xVCCJp7PGRBK8aBzZWuDIgAyOXBU44ik9KZF6Q2w%2BBSxSDKeKlQko8rp3Bl%2BNmDmJBUeXkIcP842yKbF3mG%2Bx7TmHrdNVBfr8WgNV5kqApJ9V6DCOsIUh%2BFkxX5W7FBkzpyOAXV0A7DB%2B0bS6xezcQC4T%2FJts8D8weG2evlXmazv71F5gOwmi0hWN7BIhZPaiKjeKEfpE%2FnbgngdBacjheWjVUVrVYOkZpbldMSlm6tRjklnxaqqI0%2By%2B%2FPoQNoh3md3DtJEwo5pJbzJEiG1%2BUYGZgVj4Ft69YlxQjVRNA3sEe9gYhSF%2F%2BeqJ8UMm23KnzDbNps2U7Lpz%2B8YU1cfCwFUbOA2UXDaF9BR0rhB07yDvLWTUE9i87KiqYGh0xbBqDqMFd%2FV2MAd3A93J4hTGaoM3p2%2FY3998IljHliGgPlQhTSMAMfurO7ATgKTpffygvU7SI1ksvbr4DHZlK6BqukKMOZNJFF2gID4rX8CgDdB%2BYZwhPQgNq1zkebBtKnDWNw8Yg78SI%2FJUp4SGQNODpWDflgVBW32b77codwo43I4UB199O4PkA7IFW404Og0P1YRE5zCLIgSqVfGIPTUNlJbdj9MavyjU3Syp5jgaSjlMTag87maVHJPpewS2Yqs0fv%2BOAGsXFbGVEjuNWNXNhw2IZfe3LN%2FBNGzIpld7z68NND36ES22xRUpyUGVULSNWtQwDEIdfcrpkQzMUPdDE1fjNdnIIa7OWqEj2WrgrlZDj6ZBzmoYKvqY3b7U%2BL%2Fu6Xygqe5IbGAEmLeewnJvtmGBNj4XXw%2B47V8ZaXpw8S7bB20qMWl9yfgzCCcDnkCLup4HQzUf3hI2wSuhYTkjAINTdixXbQjmjki1txDoF2WvSmiexrAmVDtTOzy8h2lYezXi0lmhZ7zAYL870lSz9mKkHYo4R6gpCcI0W%2Fw6pT%2B7j%2BUafDm1cmfaYIjYFzdbvbrlLci%2B84p1xEM7T93Y9V%2FaeepBr0PARvtYiUnry6%2B%2Fd4MShGvIcl2jt82qANG0apnE5LDHhLQEQiLQVNPrzfmBw24Id3yn3LvJXqcMyFQZy77E%2FfArKnn7qHfxvETmaQjrsdEAR4w4bRUi3r9z%2ByFCm10P17U3m3%2FrHwv%2FgSvxrm61jgvMfjrDX5NSBwt%2FW0WeDYFutY6%2BUelFQU2TYgebSTltfUryoNa32tF%2FE0Vs1bCUb33WK40pBsp3Y%2Bzj7IXxrMSAtDPGtNkhwXbYNx5Bt6NHloe5vnUP3XhEHZLursuRTT2IIgiYNkwE1Ng33aojF%2BhJO0NNk%2BIIu%2FAdqqB3IBiRSpSGp3GzY7Pr0mNTDybRtbh3OKJe3eWYHwCy22QNnNVCoFnf78W54u6o1aPr13RZzKrYPRKC8djDX8UTd0eaHuyh5fDvuFXRYQ5BX6pO5jY0pmPUoDQFAEsyXJLz1%2B54GmunBmmIgONTahffu1Ki4DRc9KDUIJ14nP1RQuDCvqzav4v2zgebJi3E%2FPvcTTVYG59Nu%2FSFEZ2xZulBplmjYU359n5n1QnqkJsCaCqOqzrjSZ81iZYzLevpJaawncauxz%2FnbgXO7SqObMVtfhCO37p88esUS7CeRjXSwkqayGRxZxVrjwe2kro1L1%2BeR%2B6ONT02GbFMDmsYK8Gabg3MvzLW9Kg6QBrPcGArbO7AYBuohbnSLGI5NTS5jikLT03tIH3325KIJ33alAUhWunFVdWh4IXXB3SwZF37kSxN6gOIy2OdwsgObMjGb%2BWtec3LywU6I02PRl4IbPZ9VMh2VUANjVh4GLAt5MQuqWOhTY%2FCg%2BtyYHPsFrCdXOuAnPK1xaq8cSmTcV7kUUVrutKsDxOoAmZjtfPKU2%2FfosEZJgcY7zA6crcewap5%2B85bjyC33JJd2cxWy%2BHzr988PbnPn8K46xLRUg2XO4UN3ToaLnGRUOfWZj0obQgA29vcq9%2FUtm02MAFl33Lfsg5FDDsYdMstChXVdUw%2BSrneJasw8v%2FJAcJOiP3KT8hs62Wo2EfeNgN9FD6TB3%2BRrLKp0NkavZAoIa%2BtcChLEbbF9fmWy8D3xYOvsm188nMr4i9XxcNMZjupKohq8mwR3uz54eEPYL%2B9hs%2F398%2BR9%2BXV207G61GRu5obTKHt1l0O7r%2FVgeRN0ju%2FREuPnmB29aHda5m3XfaglHefu52aUzbzNA0kz54Ip0TfqFjXKTHeEo7uwNeDgizfhnN441tbLzyPV8yupsTsi6I7v3HadU8NNTD4x1spJ9kfXAD49agkstsbYMPoAX7TYeO%2Fw7aEfcGPuVYNbqiBwd%2B3ZeOdmzOZ2KyhlM7%2B3hHL%2BTjVaDk6s6fRYf3cu1%2FdeciM3k%2Bs0MMoDJPq5TRzWH0LFyS94v8%3D%3C%2Fdiagram%3E%3C%2Fmxfile%3E"></iframe>
+<body class="hero-bg">
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="min-h-screen py-12 px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12 fade-in-up">
+                <h1 class="text-5xl font-bold text-white title-glow mb-4">
+                    🚀 Cyber Security Roadmap
+                </h1>
+                <p class="text-xl text-white/80 mb-8">
+                    Protecting the digital frontier - secure by design
+                </p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <p class="text-white/70 mt-2">
+                    Progress: <span id="progressText">0/13</span> completed
+                </p>
+            </div>
+<div class="roadmap-container rounded-2xl p-8 space-y-8">
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="1">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">1</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Fundamentals of Cybersecurity</h3>
+                <p class="text-white/80 mt-1">Start with the core concepts of cybersecurity</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/369591/cybersecurity.svg" alt="Cybersecurity Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.nist.gov/cyberframework" target="_blank" class="resource-link">NIST Cybersecurity Framework</a>
+                <a href="https://www.comptia.org/certifications/security" target="_blank" class="resource-link">CompTIA Security+</a>
+                <a href="https://www.isc2.org/Certifications/CISSP" target="_blank" class="resource-link">CISSP Overview</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="2">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">2</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Networking Basics</h3>
+                <p class="text-white/80 mt-1">Understand how networks operate and their vulnerabilities</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/503463/network-system.svg" alt="Networking Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.comptia.org/certifications/network" target="_blank" class="resource-link">CompTIA Network+</a>
+                <a href="https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html" target="_blank" class="resource-link">CCNA (Cisco)</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Glossary/Network_protocol" target="_blank" class="resource-link">Network Protocols</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="3">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">3</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Operating Systems Security</h3>
+                <p class="text-white/80 mt-1">Secure Windows, Linux, and other operating systems</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/339247/operating-system.svg" alt="Operating System Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://docs.microsoft.com/en-us/windows-server/security/security-and-assurance" target="_blank" class="resource-link">Windows Security</a>
+                <a href="https://linuxjourney.com/lesson/linux-security-basics" target="_blank" class="resource-link">Linux Security</a>
+                <a href="https://owasp.org/www-project-top-ten/" target="_blank" class="resource-link">OWASP Top 10</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="4">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">4</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Cryptology and PKI</h3>
+                <p class="text-white/80 mt-1">Learn about encryption, hashing, and digital certificates</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/472666/cryptography.svg" alt="Cryptology Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.khanacademy.org/computing/computer-science/cryptography" target="_blank" class="resource-link">Cryptography Basics</a>
+                <a href="https://www.cloudflare.com/learning/ssl/what-is-pki/" target="_blank" class="resource-link">Public Key Infrastructure</a>
+                <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_blank" class="resource-link">TLS/SSL</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="5">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">5</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Vulnerability Management</h3>
+                <p class="text-white/80 mt-1">Identify, assess, and mitigate security weaknesses</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/369614/vulnerability.svg" alt="Vulnerability Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://nvd.nist.gov/" target="_blank" class="resource-link">NVD (National Vulnerability Database)</a>
+                <a href="https://www.tenable.com/blog/what-is-vulnerability-management" target="_blank" class="resource-link">Vulnerability Management Guide</a>
+                <a href="https://portswigger.net/burp" target="_blank" class="resource-link">Burp Suite</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="6">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">6</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Security Operations & Incident Response</h3>
+                <p class="text-white/80 mt-1">Monitor, detect, and respond to security incidents</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/511394/response.svg" alt="Incident Response Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.sans.org/cyber-security-courses/security-operations-center-analyst/" target="_blank" class="resource-link">SOC Analyst Resources</a>
+                <a href="https://www.splunk.com/en_us/training/courses/splunk-security-operations-center.html" target="_blank" class="resource-link">Splunk for Security</a>
+                <a href="https://www.ibm.com/topics/incident-response" target="_blank" class="resource-link">Incident Response Planning</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="7">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">7</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Cloud Security</h3>
+                <p class="text-white/80 mt-1">Secure cloud environments and applications</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/521639/cloud.svg" alt="Cloud Security Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://cloud.google.com/security" target="_blank" class="resource-link">Google Cloud Security</a>
+                <a href="https://aws.amazon.com/security/" target="_blank" class="resource-link">AWS Security</a>
+                <a href="https://learn.microsoft.com/en-us/azure/security/" target="_blank" class="resource-link">Azure Security</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="8">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">8</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Application Security</h3>
+                <p class="text-white/80 mt-1">Identify and address security vulnerabilities in software</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/508688/application.svg" alt="Application Security Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" class="resource-link">OWASP WSTG</a>
+                <a href="https://www.veracode.com/security/application-security" target="_blank" class="resource-link">AppSec Basics</a>
+                <a href="https://snyk.io/learn/application-security/" target="_blank" class="resource-link">Snyk Resources</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="9">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">9</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Digital Forensics & Malware Analysis</h3>
+                <p class="text-white/80 mt-1">Investigate digital crimes and analyze malicious software</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/369612/forensics.svg" alt="Forensics Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.sans.org/digital-forensics-incident-response/" target="_blank" class="resource-link">SANS DFIR</a>
+                <a href="https://www.reverse-engineering.info/malware-analysis/" target="_blank" class="resource-link">Malware Analysis Tutorial</a>
+                <a href="https://www.volatilityfoundation.org/" target="_blank" class="resource-link">Volatility Framework</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="10">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">10</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Penetration Testing & Ethical Hacking</h3>
+                <p class="text-white/80 mt-1">Simulate attacks to find and fix vulnerabilities</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/521016/bug-bounty.svg" alt="Pen Testing Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.kali.org/" target="_blank" class="resource-link">Kali Linux</a>
+                <a href="https://www.offensive-security.com/pwk-oscp/" target="_blank" class="resource-link">OSCP (Offensive Security)</a>
+                <a href="https://tryhackme.com/" target="_blank" class="resource-link">TryHackMe</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="11">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">11</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Governance, Risk, and Compliance (GRC)</h3>
+                <p class="text-white/80 mt-1">Understand the regulatory and policy aspects of security</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/369604/compliance.svg" alt="GRC Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.ismaca.org/resources/it-governance" target="_blank" class="resource-link">IT Governance</a>
+                <a href="https://www.iso.org/isoiec-27001-information-security.html" target="_blank" class="resource-link">ISO 27001</a>
+                <a href="https://gdpr-info.eu/" target="_blank" class="resource-link">GDPR</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="12">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">12</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Threat Intelligence</h3>
+                <p class="text-white/80 mt-1">Gather and analyze information about threats</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/510468/threat-intelligence.svg" alt="Threat Intelligence Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.cisa.gov/resources-tools/resources/cyber-threat-intelligence" target="_blank" class="resource-link">CISA Threat Intel</a>
+                <a href="https://www.recordedfuture.com/threat-intelligence" target="_blank" class="resource-link">Recorded Future Blog</a>
+                <a href="https://malwarebytes.com/threat-intelligence" target="_blank" class="resource-link">Malwarebytes Threat Intel</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-12 text-white/70">
+        <p class="text-lg">💡 Click on each node to explore resources and check off completed topics!</p>
+        <p class="mt-2">🎯 Track your progress and stay motivated on your journey</p>
+    </div>
+</div>
+
+
+    <script>
+        // Initialize roadmap functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const nodes = document.querySelectorAll('.roadmap-node');
+            const checkboxes = document.querySelectorAll('.node-checkbox');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const totalNodes = nodes.length;
+            let completedNodes = 0;
+
+            // Create floating particles
+            createFloatingParticles();
+
+            // Animate roadmap paths on load
+            setTimeout(() => {
+                document.querySelectorAll('.roadmap-path').forEach((path, index) => {
+                    setTimeout(() => {
+                        path.classList.add('animated');
+                    }, index * 100);
+                });
+            }, 500);
+
+            // Load progress from local storage
+            loadProgress();
+            updateProgress();
+
+            // Add click functionality to nodes (for expanding content)
+            nodes.forEach((node, index) => {
+                node.addEventListener('click', function(e) {
+                    // Don't expand if clicking on checkbox
+                    if (e.target.closest('.custom-checkbox')) return;
+                    
+                    const contentArea = node.querySelector('.content-area');
+                    const isExpanded = contentArea.classList.contains('expanded');
+                    
+                    // Close other expanded nodes
+                    nodes.forEach(otherNode => {
+                        if (otherNode !== node) {
+                            otherNode.querySelector('.content-area').classList.remove('expanded');
+                        }
+                    });
+
+                    // Toggle current node's content
+                    contentArea.classList.toggle('expanded', !isExpanded);
+                });
+
+                // Add change listener to checkboxes
+                const checkbox = node.querySelector('.node-checkbox');
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        node.classList.toggle('completed', this.checked);
+                        updateProgress();
+                        saveProgress();
+                    });
+                }
+            });
+
+            function updateProgress() {
+                completedNodes = 0;
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        completedNodes++;
+                    }
+                });
+
+                const progressPercentage = (completedNodes / totalNodes) * 100;
+                progressFill.style.width = `${progressPercentage}%`;
+                progressText.textContent = `${completedNodes}/${totalNodes}`;
+            }
+
+            function saveProgress() {
+                const progress = {};
+                checkboxes.forEach((checkbox, index) => {
+                    progress[index] = checkbox.checked;
+                });
+                localStorage.setItem('frontendRoadmapProgress', JSON.stringify(progress));
+            }
+
+            function loadProgress() {
+                const savedProgress = localStorage.getItem('frontendRoadmapProgress');
+                if (savedProgress) {
+                    const progress = JSON.parse(savedProgress);
+                    checkboxes.forEach((checkbox, index) => {
+                        if (progress[index]) {
+                            checkbox.checked = true;
+                            checkbox.closest('.roadmap-node').classList.add('completed');
+                        }
+                    });
+                }
+            }
+
+            function createFloatingParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const numberOfParticles = 30; // Adjust as needed
+
+                for (let i = 0; i < numberOfParticles; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    particle.style.left = `${Math.random() * 100}vw`;
+                    particle.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5 to 10 seconds
+                    particle.style.animationDelay = `${Math.random() * 6}s`; // Stagger animation start
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

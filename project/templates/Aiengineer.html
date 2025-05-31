@@ -3,10 +3,768 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Engineer</title>
+    <title>Frontend Development Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .roadmap-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .roadmap-node {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            background: #1a1a2e;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .roadmap-node:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .roadmap-node.completed {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #1a1a2e, #064e3b);
+        }
+
+        .roadmap-path {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(to bottom, #3b82f6, #7c3aed);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .roadmap-path.animated {
+            animation: pathGrow 0.8s ease-out forwards;
+            transform-origin: top;
+        }
+
+        .node-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+        }
+
+        .roadmap-node:hover .node-icon::before {
+            transform: rotate(45deg) translate(100%, 100%);
+        }
+
+        .svg-icon {
+            width: 48px;
+            height: 48px;
+            margin-left: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .svg-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #3b82f6;
+        }
+
+        .content-area {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-area.expanded {
+            opacity: 1;
+            max-height: 300px;
+            padding-top: 1rem;
+        }
+
+        .resource-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            background: linear-gradient(135deg, #3b82f6, #1a1a2e);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .resource-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .resource-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #3b82f6;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); }
+        }
+
+        @keyframes pathGrow {
+            from { transform: translateX(-50%) scaleY(0); }
+            to { transform: translateX(-50%) scaleY(1); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff, #e5e7eb);
+            border-radius: 6px;
+            transition: width 1s ease-out;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .title-glow {
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Custom Checkbox Styles */
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #10b981;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .custom-checkbox .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .svg-placeholder {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #3b82f6;
+            text-align: center;
+            line-height: 1.2;
+            margin-left: 1rem;
+        }
+    </style>
 </head>
-<body>
-    <h1 style="text-align: center;">AI Engineer </h1>
-    <iframe frameborder="0" style="width:100%;height:2997px;" src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Aiengineer.html#R%3Cmxfile%3E%3Cdiagram%20name%3D%22Page-1%22%20id%3D%22p2G_gaPQAOSAgndD-6M_%22%3E7V3bduI4Fv2aPBbLulp6TKWquqcn1Z2p1HRPPzqgEE8ZizYml%2F76kcEGWxJgCJbEWpOHqmDAga3tc87eOpKv0M3s9acimT99lRORXcFo8nqFPl1B%2BAHAKFL%2FV4fe1ocIhusD0yKdrA%2BB7YH79G9RH6zfN12mE7HovLCUMivTeffgWOa5GJedY0lRyJfuyx5l1v2r82QqjAP34yQzj%2F6RTsqn%2Bihovlf1xM8inT7Vf5qR%2BolZ0ry4PrB4SibypXUIfb5CN4WU5fq32euNyCr0GlzW7%2Fuy49nNBytEXvZ5w0LcoWv2V%2Fxb%2BRf9%2BvxEPoBCDdD6LM9Jtqy%2F8H2ZFKU6dP0P9c%2FnfJrmQhRpPlWPfpHLIhdv9dcp3xqMXp7SUtzPk3H1%2BEUR4Qp9XJSF%2FLGBTH3Zj49plt3ITBarNyEBJkTEm1e2nuE0RglVzxRymU9E9fGBelR%2FUlGU4nUnBGADrKKkkDNRFurzRvUbUEzwiKzf9dbl2ct2cGFUn%2FipNa6U1pyq%2BTTdnHwLufqlRv2IEYDGCHypvnZSpjJPqnd%2FVUQSik3peHEe5B8fH%2BF4bEN%2BQh8oGQh5zDq4bwJDG3jMTeCb950deGQAf6u4nhQV97OpeCiSE%2BE%2BP3iYRR3wEKAGeIAih%2BBhA7ybJBsvs%2BWpHD0%2FaJSjw6ABl4wjBmh3hXxIHtIsLatPfgVpMpuvvn6kwnCZLt5x0Z8fUA40FkJiXsI0cggoNQD9lC7GhSjFWeLm2SHEgHQhhCQ2IQTYIYSxjZPTIpnN1jn%2F%2FodKHmdKPCrhswm2JR4GHxAdKPFQ2IEcM26GAU4cQs5MyN%2FKJ5mHwlJEoy5LaWRe6CByGTm5Adm3YNCKCT%2BIVuwyKjZhuoXWL8ssDaecYTE7iBh3GQSBRQb96zYUvHAE4UG8WOwSL1O0fE3GT6p8VgdvVQ2dr5PHl0rIzNTXTM6VQvxoF4o7%2BMeAjCwRkVFzCAaTjcCUL%2FfLuSie04X67u1RCIPECGOuSe8YYguMMHKpY4ApZP6dL8IGMu5GA4ZsbNyc2Q2MprT5JtL8URZjUV3%2FIeLIIdUIyagVSQRdImnRNELMu3H1Y7IISdVEWr0Yx9CGI3BaBJnCxpqibtOHIilScckSR3c6uD0iEKeB1VQ59%2BP0R1p%2ByCrwQ%2BEuwjzSooAdPYCdRgFT8HwX%2BUIWXzL5Egx2hHbreBDFduhcpiJoqp%2B7t%2B8qET0FgxtnUMONWXEDloJyONxMDfRPUSQBZZkGjuY6JTbQuEtbotFl7WSdlEpoRyrWiXxc5ZpzGmh%2B1A%2FSrnKAkI2t3GV6gab8qZG%2FK8S8kGOxWIRUbCKtaAfAyl7AnV7ypvipQfw9XSyTLP17NQsZDIhmrgaqqrFKcadRwBQ%2Fn1%2Fn6tJMSrn6%2FDWo13mSvS3SYCIq4s3swwZNuwBym79NAfRFJOWyqIJppx8hDBRxRLvqBwBuRTFy6WhCU%2F4YMvJi9U6s%2BccA2aOA0xlxaAqeX8WyWLVw%2FCrKF1n8qGKAqkMVzOOKz%2BEEAqhNSwKMbAoexBZAh2uMMTXQjcyfZbbctMboAIeDqG7S7UDU6okMhigypdE3MV4WxdqhCxdNQzDtQJO4DLHIFEzfiyRfPMpiJgr1xKobMhgQcaQ1EQGE7XnKZbZvvNUWiNeT50RJp8lV3YP4Sc6SNL9oBdX0tTXIEzvyzbSaG%2BRNBfVrVWatIsBtkk%2BXVWdspaeCE1Obyc4NnnbfiVm6OoYLrpaWODmbL8tVLFCCKiQlRSKoKymKgTXlu5xXRqaS%2BknkQgmp9FnU8SAMBI05j134Eaf4mdop%2FGk4rgXHTaewtzk4ZIqnm0wuq4zUbtH8JJTIf1vjerm5KSJ6JOA7XACnxZWppq7%2FuG9Kgvtqen4ckIBCXF9XACNmj6dOqytTQv0k5TSrYmnD6HBiKqJA5%2BJOFJ32upuy6frvtR9lm1IOBEy9yW4HlBC5JCQ2NdPPy%2Bm07harMAoEPgyA3q60i4vEZe9wMwvdbmu4%2FW2%2B0FLTdykvu2kbGvEU2OdInc73YVMzNUsefxdFVeGHFAFQHOsgoshKYeY0BphCqQHx3RXVEL3wfUF02rGMTaXUgPhVsbCUIU2RIEZAXyY6BdGUS59f56JIa630vUjGPwLCEbf6RPbjCCOX88jY1Ev3czFO3zuDHEQm0tatgpjb1l66bG3Epja6TYqVWdfy7cJyn40lrCC2ztlB6LSasuijMP2makJJ1%2BksslZETh0nYtFGlUL%2FJhZKEAXUc2dMyDFuneLELpUlMeXQCr27Qk6W43JVET2LTM6DKok4ohqU1tIcIpe5nJjC6F4%2BVhBefgMe7TqkENvbHZDLJERMKVQtZs%2FErIJcZs8B1U0IAX3Z9Y7JDqeMNXXQNmq%2Bj7UDTBgh3AtB6jJ9E1ME3cjZbJmn47AaFzkw7IxdDHSpxImpf25kXqb5Ulb7eITnaXLaXegCsbWLFkZOWWiqn4%2FLNJtUeVwW5aPMUrnO6f8V4%2FKiXTmkwU%2BtC2EhdCk%2BiamGfpuLfJWFlsWqBb8idZE%2BrPrGLroQaN7T4B8jq%2FgnToOIqaFaHTw36gunj3U8vmzuayUEQ8z7dAq1qK%2F5PKs%2B96PCxLqJ2zeZnWuxo6flKNpAKDliHQiXvarNHjOtgTAgHi%2BL5w0Sk2Tx1Hlwl5SlKPIV0NUS%2BArUpCivqy0M1cFc5uo0H0U%2BaY48ZHL8ozr0mpb%2FUY%2Bj%2Bvc%2Fq99HnK1erb7b6jkFUP3wz%2Fql3YF5zOTLdZ7O1mVTe7DExNgfURsq9SXXgXY3PDUYZeVSlXteh%2BxDX4hs7ci0%2F6htDFdvVQAlb60XzGWar9Nufea76kC7ttV2CIJ1t%2BmWEOtTbumx%2BWzvYIypn5wzZoRanAGXSBjshTAxQR4IY8pF94SJL50wxAthOPcRYUx17JowoJOTWHyJjKE%2BGIP1FTmw3mFlWMaYfsB%2BxvSlQ%2B8x30YaTLrk4euKRj3%2B9Nqqdj69tR7craZuq4br9TEPbIm9xBemLUFUGWo3W0yyEa6RrekuaD7AGp76bVqpfA7emQ6K%2B9QW0VBzW9yTe8wL9yjukodgF5HKNH08VM97GIP5RVCG%2B6mftXBFqAvKmD6Ve8pQfOlBBkReKMO1eogQB5SJTXvNPWX4PsqAy%2BDMDktv4Bo6ot0%2BBYJccCY0J5CSkMJMs8T1MGf8eIEUduMM3awsHZY1AbiBXa1%2BmaTx4wcSrZ6JmRvShOAIkpMLmtVTWzG%2FetSo%2BWAI5ckv1Ai17fTsp%2BgRI%2FEoav1o%2B9ySzYxZ85HWSAym8OPgvMjLjG9%2BzEigtc9tW7eHjW8ebSFH1Dg84p5MHU1uMX5kAKKapdhaU%2B7IVIyDsIhOT49Dx5ze4s2PR0S1Ng8QOQo6%2Fm2ibqYKatKsN2ugF5sIR1hnDXXCGubfKeqyZtUFF44f3Z83nqwiLdpwN8Gm2dYuHNkfVI5q0DjMGk%2BNY%2FoeUMARbQJwi0awHXAulDZ%2B7CL99nqtDYOHpU0IflHML582Xkwhc8c5uN8VOhttQvNuYn4UbTz6jP0p5cnY0fd9BiQ%2BSudjqBfccHubN0feIguge6hbex%2FHz6E52Lv09mM1IX01OY72cvBstAnAH%2BrW3kFN1PanjR9%2FiMSxH9r494dUBnzHrNvODtpQCIU8WUd6LkRuqnIemnWkxaEOnVbsCqe86k0pT64S0CmFj5tGwQDREebbHy3kbfcQcFRrNetYQkmalxH6ms2rD%2FPUj4%2BFdZ4SNz4WD8DH6lbuKKQSrD9tPLU96dqPuGmW4yH4WMFO7PZnjScbS98IcLuJyLCsCc3GovAyaePHqkJQp40b95OH5i7xsGjTuwT34y7h2NzGHTsxCngA%2FtIIsqtQ01Rv4nhaoxYZW1a7Ik4QDhO8eOJgTz6SNk2naOMkUYEoNCMpqGmQ%2FrTx4xUBTj3FGxAFZuqMGA6JOc0tVw4zx5N7Q407VEDqiDkBGDgjGKwU788cT%2FtYRca2tM6YE4KH845ptGCY42mBGkbemBOaj8OCMo37M8dTyxFj3pjjYHurmHZGfxSt%2BNV%2FxnT16PR9rA6PuqcNqvSpArp%2FiXSPMxDuekUZiELzAmFnqh50qWeZqt%2B9e5q%2FSXzcW5j5cRD1%2FYZBvOlwHDhcBWAgdth2XH%2Bat9n2%2FoTytLJRn22P3UybgigEYzGK4g6pWHwuWtl2gAyFasTPrllE72ljjqgGQvMiaVDLaPvzJozlkIBB5oY3oVmRNKiNQpqbnB3mjR8rEvFuUzYkbpqyAQjAiOymNXqZvPG0IhJQT7zxb0OevozWW4Xdn04Du5NnV%2Fjg%2F%2BbieQbej7mob%2F8BHa3hAOBYZ8hhv%2Bk5x7933TqwV3P%2BC%2F9Ys%2BVCB5D1HcCBvZHzD%2BCx5sb7BnAU7R3D9dPDDSPvOYx0YN%2Fh7MMIexTyrVEaZ8likVa3oHsqZ1kN9K5bihhX4H47fMe1uc8qP%2BMQ996eDdpHuHUrvMYEat8Jrzl2HBFsdzbS9ksGfWdlDmdvYu4ZOPDyNgB76IFT6Qdhu6eyuqMN3k9Ci5%2FZ3tELYy3kbEPSMJOLZ9zHdMcspCPSMn23r%2Bhk0iKmLWdhxD1pe4iWI0nbin%2BQ6TQjw9Ls8I4DfkOePhPN2TtCnr6qBXiIeT3aIk6mD2LH5E8rc1oJvLucoTWX5OeeYH3DHfQc7vTWCXA6YxE3dqGC7hnbQ22fmqVR3OZYdSNdejTH2lka8ndfAOekbO9VN57LSn0CipxeVyKurzjFHoJsD3%2FhZF0TYy0sHj9R3s743bsKfajEbOyZt70nTJHvylLvxQcM46oLcLOFR3wiixniI9S0TTcn5xSq4Sebk2s3mh%2Bc1T1Ml1BYzXRSIzwsqQ%2F3H4VVx8IIoNNlkH4ygIyTDc1G1KPpJBQ2YqjTcbsdgCc6ksDoCE0GnU5HHLmnIxiQjp27I5%2BmhNpVKjNSfuQ75fefa%2FSd8vGIA41tMT6duor2%2Bvkodc9eOCB7AdecULafvW3Xk%2BhMhSfZngN7A729LL%2FcjbthEjXi%2FniNpRlZm4%2F4br6qh4WUZfvlRTJ%2F%2BiononrF%2FwA%3D%3C%2Fdiagram%3E%3C%2Fmxfile%3E"></iframe>
+<body class="hero-bg">
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="min-h-screen py-12 px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12 fade-in-up">
+                <h1 class="text-5xl font-bold text-white title-glow mb-4">
+                    AI Engineering Roadmap
+                </h1>
+                <p class="text-xl text-white/80 mb-8">
+                    Turning data into decisions - AI that thinks ahead
+                </p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <p class="text-white/70 mt-2">
+                    Progress: <span id="progressText">0/13</span> completed
+                </p>
+            </div>
+<div class="roadmap-container rounded-2xl p-8 space-y-8">
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="1">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">1</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Foundational Math & Statistics</h3>
+                <p class="text-white/80 mt-1">Grasp the mathematical backbone of AI</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/511394/calculator.svg" alt="Math Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.khanacademy.org/math/linear-algebra" target="_blank" class="resource-link">Linear Algebra</a>
+                <a href="https://www.khanacademy.org/math/calculus-1" target="_blank" class="resource-link">Calculus</a>
+                <a href="https://www.khanacademy.org/math/statistics-probability" target="_blank" class="resource-link">Probability & Statistics</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="2">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">2</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Programming Fundamentals (Python)</h3>
+                <p class="text-white/80 mt-1">Master the primary language for AI</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/452091/python.svg" alt="Python Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://docs.python.org/3/" target="_blank" class="resource-link">Python Docs</a>
+                <a href="https://www.codecademy.com/learn/learn-python-3" target="_blank" class="resource-link">Codecademy Python</a>
+                <a href="https://www.datacamp.com/courses/introduction-to-python-for-data-science" target="_blank" class="resource-link">Python for Data Science</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="3">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">3</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Data Structures & Algorithms</h3>
+                <p class="text-white/80 mt-1">Build efficient and optimized AI solutions</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/472097/data-structure.svg" alt="Data Structures Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.geeksforgeeks.org/data-structures/" target="_blank" class="resource-link">GeeksforGeeks DSA</a>
+                <a href="https://leetcode.com/" target="_blank" class="resource-link">LeetCode</a>
+                <a href="https://www.coursera.org/learn/data-structures-algorithms" target="_blank" class="resource-link">Coursera DSA</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="4">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">4</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Machine Learning Fundamentals</h3>
+                <p class="text-white/80 mt-1">Understand the core concepts of ML</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/493605/machine-learning.svg" alt="Machine Learning Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://developers.google.com/machine-learning/crash-course" target="_blank" class="resource-link">Google ML Crash Course</a>
+                <a href="https://www.coursera.org/learn/machine-learning" target="_blank" class="resource-link">Andrew Ng's ML Course</a>
+                <a href="https://scikit-learn.org/stable/user_guide.html" target="_blank" class="resource-link">Scikit-learn Docs</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="5">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">5</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Deep Learning</h3>
+                <p class="text-white/80 mt-1">Delve into neural networks and advanced models</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/487930/neural-network.svg" alt="Deep Learning Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.tensorflow.org/tutorials" target="_blank" class="resource-link">TensorFlow Tutorials</a>
+                <a href="https://pytorch.org/tutorials/" target="_blank" class="resource-link">PyTorch Tutorials</a>
+                <a href="https://www.deeplearning.ai/" target="_blank" class="resource-link">DeepLearning.AI Courses</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="6">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">6</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Natural Language Processing (NLP)</h3>
+                <p class="text-white/80 mt-1">Process and understand human language</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/528343/language.svg" alt="NLP Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://huggingface.co/docs/transformers/index" target="_blank" class="resource-link">Hugging Face Transformers</a>
+                <a href="https://www.nltk.org/" target="_blank" class="resource-link">NLTK</a>
+                <a href="https://spacy.io/" target="_blank" class="resource-link">spaCy</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="7">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">7</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Computer Vision (CV)</h3>
+                <p class="text-white/80 mt-1">Enable machines to 'see' and interpret images</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/486242/camera-vision.svg" alt="Computer Vision Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://opencv.org/docs/" target="_blank" class="resource-link">OpenCV</a>
+                <a href="https://pytorch.org/docs/stable/torchvision/index.html" target="_blank" class="resource-link">TorchVision</a>
+                <a href="https://www.fast.ai/2019/07/08/fastai-v3-paper/" target="_blank" class="resource-link">Fast.ai CV</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="8">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">8</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">MLOps & Deployment</h3>
+                <p class="text-white/80 mt-1">Operationalize and deploy AI models</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/522513/server-line.svg" alt="Deployment Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://mlflow.org/" target="_blank" class="resource-link">MLflow</a>
+                <a href="https://www.docker.com/" target="_blank" class="resource-link">Docker</a>
+                <a href="https://kubernetes.io/" target="_blank" class="resource-link">Kubernetes</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="9">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">9</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Cloud Platforms for AI</h3>
+                <p class="text-white/80 mt-1">Leverage cloud services for scalable AI</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/503460/cloud-hosting.svg" alt="Cloud Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://cloud.google.com/ai-platform" target="_blank" class="resource-link">Google Cloud AI Platform</a>
+                <a href="https://aws.amazon.com/machine-learning/" target="_blank" class="resource-link">AWS ML</a>
+                <a href="https://azure.microsoft.com/en-us/solutions/ai-machine-learning/" target="_blank" class="resource-link">Azure ML</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="10">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">10</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Reinforcement Learning (Optional)</h3>
+                <p class="text-white/80 mt-1">Explore learning through trial and error</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/532321/brain.svg" alt="Reinforcement Learning Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.deepmind.com/learning-resources" target="_blank" class="resource-link">DeepMind Resources</a>
+                <a href="https://spinningup.openai.com/en/latest/" target="_blank" class="resource-link">OpenAI Spinning Up</a>
+                <a href="https://gymnasium.farama.org/" target="_blank" class="resource-link">Gymnasium</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="11">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">11</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Responsible AI & Ethics</h3>
+                <p class="text-white/80 mt-1">Develop AI with ethical considerations</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/472064/ethics.svg" alt="Ethics Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://ai.google/responsibility/responsible-ai-practices/" target="_blank" class="resource-link">Google Responsible AI</a>
+                <a href="https://www.microsoft.com/en-us/ai/responsible-ai" target="_blank" class="resource-link">Microsoft Responsible AI</a>
+                <a href="https://www.ibm.com/blogs/research/category/ai-ethics/" target="_blank" class="resource-link">IBM AI Ethics</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="12">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">12</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Project Work & Portfolio</h3>
+                <p class="text-white/80 mt-1">Apply your skills to real-world problems</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/433066/project-management.svg" alt="Project Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.kaggle.com/" target="_blank" class="resource-link">Kaggle</a>
+                <a href="https://towardsdatascience.com/build-your-data-science-portfolio-a-guide-to-showcasing-your-work-and-skills-d6365a12ef65" target="_blank" class="resource-link">Portfolio Guide</a>
+                <a href="https://github.com/collections/machine-learning-projects" target="_blank" class="resource-link">ML Projects (GitHub)</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+</div>
+
+<div class="text-center mt-12 text-white/70">
+    <p class="text-lg">💡 Click on each node to explore resources and check off completed topics!</p>
+    <p class="mt-2">🎯 Track your progress and stay motivated on your AI engineering journey</p>
+</div>
+
+
+    <script>
+        // Initialize roadmap functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const nodes = document.querySelectorAll('.roadmap-node');
+            const checkboxes = document.querySelectorAll('.node-checkbox');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const totalNodes = nodes.length;
+            let completedNodes = 0;
+
+            // Create floating particles
+            createFloatingParticles();
+
+            // Animate roadmap paths on load
+            setTimeout(() => {
+                document.querySelectorAll('.roadmap-path').forEach((path, index) => {
+                    setTimeout(() => {
+                        path.classList.add('animated');
+                    }, index * 100);
+                });
+            }, 500);
+
+            // Load progress from local storage
+            loadProgress();
+            updateProgress();
+
+            // Add click functionality to nodes (for expanding content)
+            nodes.forEach((node, index) => {
+                node.addEventListener('click', function(e) {
+                    // Don't expand if clicking on checkbox
+                    if (e.target.closest('.custom-checkbox')) return;
+                    
+                    const contentArea = node.querySelector('.content-area');
+                    const isExpanded = contentArea.classList.contains('expanded');
+                    
+                    // Close other expanded nodes
+                    nodes.forEach(otherNode => {
+                        if (otherNode !== node) {
+                            otherNode.querySelector('.content-area').classList.remove('expanded');
+                        }
+                    });
+
+                    // Toggle current node's content
+                    contentArea.classList.toggle('expanded', !isExpanded);
+                });
+
+                // Add change listener to checkboxes
+                const checkbox = node.querySelector('.node-checkbox');
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        node.classList.toggle('completed', this.checked);
+                        updateProgress();
+                        saveProgress();
+                    });
+                }
+            });
+
+            function updateProgress() {
+                completedNodes = 0;
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        completedNodes++;
+                    }
+                });
+
+                const progressPercentage = (completedNodes / totalNodes) * 100;
+                progressFill.style.width = `${progressPercentage}%`;
+                progressText.textContent = `${completedNodes}/${totalNodes}`;
+            }
+
+            function saveProgress() {
+                const progress = {};
+                checkboxes.forEach((checkbox, index) => {
+                    progress[index] = checkbox.checked;
+                });
+                localStorage.setItem('frontendRoadmapProgress', JSON.stringify(progress));
+            }
+
+            function loadProgress() {
+                const savedProgress = localStorage.getItem('frontendRoadmapProgress');
+                if (savedProgress) {
+                    const progress = JSON.parse(savedProgress);
+                    checkboxes.forEach((checkbox, index) => {
+                        if (progress[index]) {
+                            checkbox.checked = true;
+                            checkbox.closest('.roadmap-node').classList.add('completed');
+                        }
+                    });
+                }
+            }
+
+            function createFloatingParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const numberOfParticles = 30; // Adjust as needed
+
+                for (let i = 0; i < numberOfParticles; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    particle.style.left = `${Math.random() * 100}vw`;
+                    particle.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5 to 10 seconds
+                    particle.style.animationDelay = `${Math.random() * 6}s`; // Stagger animation start
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

@@ -3,10 +3,780 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Computing</title>
+    <title>Frontend Development Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .roadmap-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .roadmap-node {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            background: #1a1a2e;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .roadmap-node:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .roadmap-node.completed {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #1a1a2e, #064e3b);
+        }
+
+        .roadmap-path {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(to bottom, #3b82f6, #7c3aed);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .roadmap-path.animated {
+            animation: pathGrow 0.8s ease-out forwards;
+            transform-origin: top;
+        }
+
+        .node-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+        }
+
+        .roadmap-node:hover .node-icon::before {
+            transform: rotate(45deg) translate(100%, 100%);
+        }
+
+        .svg-icon {
+            width: 48px;
+            height: 48px;
+            margin-left: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .svg-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #3b82f6;
+        }
+
+        .content-area {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-area.expanded {
+            opacity: 1;
+            max-height: 300px;
+            padding-top: 1rem;
+        }
+
+        .resource-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            background: linear-gradient(135deg, #3b82f6, #1a1a2e);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .resource-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .resource-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #3b82f6;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); }
+        }
+
+        @keyframes pathGrow {
+            from { transform: translateX(-50%) scaleY(0); }
+            to { transform: translateX(-50%) scaleY(1); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff, #e5e7eb);
+            border-radius: 6px;
+            transition: width 1s ease-out;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .title-glow {
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Custom Checkbox Styles */
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #10b981;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .custom-checkbox .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .svg-placeholder {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #3b82f6;
+            text-align: center;
+            line-height: 1.2;
+            margin-left: 1rem;
+        }
+    </style>
 </head>
-<body>
-    <h1 style="text-align: center;">Cloud Computing</h1>
-    <iframe frameborder="0" style="width:100%;height:2236px;" src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=cloudcomputing.html#R%3Cmxfile%3E%3Cdiagram%20name%3D%22Page-1%22%20id%3D%22MYIbH7SOKBUJLsMk7B9I%22%3E5V3bcts4Ev0aP1pFELw%2B2k7sZOJsXHF2Z%2BdpiqIgiWOKVEFUbOfrF7yKBCASjAFevKlK2YRISO5z0Og%2BaEAX8Gb3coe9%2FfZrvELhha6tXi7ghwud%2FNNM8iNtec1bTNfNGzY4WOVN4NTwGPxCRaNWtB6DFTo0bkziOEyCfbPRj6MI%2BUmjzcM4fm7eto7D5rvuvQ1iGh59L2Rb%2FwxWybZoBZp2euETCjbb4q0ds3hh55U3Fw2HrbeKn2tN8OMFvMFxnOS%2F7V5uUJgar7RL%2FtztmVerD4ZRlIg8cPyxvNt%2BI%2F8%2F2T%2Fw5%2BX65%2Fb735du8eF%2BeuGx%2BIsfEw8npOkmjI%2Br9Ge82x%2BTINqkv5N3Q7j4e5LX0kjP2yBBj3vPT6%2BfCREu4PUhwfFTZTPy117j%2BBitUPppALlaB2F4E4cxzrqACKxMZFfP1V5xLRt6Fnml%2BKQIJ%2BjlrA1AZVlCSRTvUIJfyS3FA66RP1GQsYTm%2BYSsnjakbdsaqJZVEKog06bq%2BGRv8kth8uzy3weEvy3%2FSSmpa6G3JMMie%2FQeeTgiTfdBdHwhP2%2BJTbwd%2BfheeMjfJAyip%2FzebZKkLL9K30O%2FfX5%2BXoTpU4sYEyxufWKIYB34XhLEUXZLbXAUb3b2TdpJUTdiwSK5aK%2FXa933eWivrKVlSkLbAQ20AbRYuA2Hhbts6wE3uawhLsSAf6HkOcZP%2BcC69g6BL0AAnwzGJPB4FCBP30Z5nxwqnH23diboqplARr2zMnhMcPQltGQxwWmOe0NnmQANVUwQdMWQccXl%2BH18IkY7MG4Xb%2BPd8njgGp0HzQSAuKwm9gIKlx2TQOeMyapRgg8mM9rOi1a5F0btgy7zuH7%2BQDHqOKOL12M72Ib0gSUDHWg10SFTHwtPORuONlBMZqDcBsRyZJy8HhK0kxKeSOG607Qm1Nh4A5Su6I3WFDSdxZjuwfOf0hj4Rr%2B40r56Efk9jRQmY0SgU5Q0OUYs2xpG1FQZ0WaNiOMN9na7fHq996LNkdiR9djzCZ2aEya0OZEylMPcc1764TXZpoFtV0i0z%2B4rfPMq9vkeut5bO7rO%2Bwh5yJhYmA0QDQ6IQHNVOfNzuD5uc6M%2B%2BjjY53llF8SH9JFDdj%2F5nQ%2FwmW7bsXZVYz3MaAV6M6%2B1eBONJWe4%2Fva0XUkmNb%2F5H4QPWfaq3cQRsVCowmMONN6oecrmYWDz5il5LvMuSNoH0yZILg%2F%2BLk0jS2fJDKSqkw405YsEUsKFJgqWyWZ6jrKB0ILLp%2BOyHRoCxmFB8NkelwU8fGyqjjrgkZ%2B5S4AHGk1JxuZNSUDOIHmDo2Iz8VIMfQi9ZB3jHQntGirKHGeNUnAosHA0jiiiq43xrv58bB8V3vNh4e28XyTAywdFgr0gymZ33vio%2BusAeJrZt03NIBY7OFxlY%2BMsRL%2BOuEsjSRXNxS7wcXyI10mBFIouj6km6eUdcOE69d0BmDlJwMp0uhxBDi%2FAHn62ieNNJocUTqsNOj%2B9ZbHJnmBGGDv9cHruAM6aInAmFatxgTPNsachVmf4HK2xRwx09JNs5KQfJI2dV0jFNDSKNu9yF%2BXUxs0%2FEMZeOq23D5Y0FU3KWxdBXERtnIFCddiBs3zFQYZzA9R05PKEN0kaUA%2FvlrmeW2LaYt2zM6ZmQojM561PPXAFfc67dKAoX0uQgiKl6JPglg3zgK1s7etsWPH9K2n4gXZ7ElGjjpVPsQAj%2B3mJ0SE%2BYh9d7jItG5%2BJPHhv3w4w0KYIMIR2cypzedKPskVuwakMAGYqu4mjdbA54mKAyV56mIJqfqoSqs9lJlQ6l11Fh2AZdkTsuWPM7zyvNjS66gB4knLDZbVGUSHCyamKDz%2Fm8GAFh4fjfo8mtAqn0asJADg2x5RAiilF7WawbmWL1lOxmgHouRdwMno57kDUYuzaeaq8k4wP4eBXLdiZYyYBdIqiOk9etOWseJ3zvx9i%2F6kskWx1v6vsxvPet95RB6iTTLKr2tKq%2FA44HIcxttgL2Cy7GhGk%2BTvaBMRYgaTFfAl2hZR4AQAn5NM1ORG9qBGdViN%2Bw%2F4WEdMo8y8DCeYOPQdCjnBEQnKlDubLcYlwhDqTpqfqvrpUwfM0dI8dWE800YU2jY4BAetwjLEdjs4ug3%2B8eZyMd3HhwmhWEwDosnZ05BQBitqMzR%2BvvkzGZrRD5hXalMHyQPbSWX%2F8mXR1Q37THoI9Ik5DTXnaSJGeCYevtvgDRU9BJFC0%2F09%2BY%2BWG%2BV640V0HvHCaLphSjIFp8yI%2BOdPjGxwwmzXeBcm9tyRt6SiZhlO5NGiK85Q9fVg3zGaPZUWKduUXm1CmYT4IzQWlxpllTKygmF3UgGz99dc4CpIY55XDF7rl7faZBbT7eLOplmFnGS5T268sjvYma%2F%2FV2SJinD66RccON72v7usKlukeOwC3p%2BmpLYsOlm2DFywPvi50h721F3ntaG3ym05ljGewanTWAdREF2GpGdXmrI5XEsZwKH28%2F0IaHhPPf2pHKg1%2FUOgdksAnaKXQpfu5%2BWgxnXYgNsk8FDoiiMGxk1DIJqGPyD%2FiIHmlpqF0%2B3cYeJE%2F5xIT2tc5LjsTmXJ0YVEAOCuiRY1pDYhrdEhH3gP2SHTlz3lDUbXyUGLAXah2ORj8xuZ7UQzYLPkOZUcf5PuqicVmS3lA1QXomsbZymkOqhJDdpnz%2BhiEq4zhcerD5kxw2CS4DnjpxsBOhs10r%2Fb7MP3Ua2IDXfsjXs5ZBSoJVe1WLiv3GxneoAuskE2RGQMT9%2F6zstwhPW7lKj2phjREcUTuuUbRqmxZhjEJh0jTS5D8l1yny%2FD51V9FB8RY%2BLX2UnqZvqadCW%2FQijnxhjI4%2BbBZCVXL31k6b%2FLhNyhpu%2FEMhJhEhUnws%2FlJeHBkjxJreK%2B1G%2FZxEBXOoo5W1f9bAGRT9MkAmD714aV4Kbt4LS5kQgtEodXnBi271NsO7co7bBsXD16SIBxlLjB1NsLoU94yjJ%2BvoqAoLmVY4NpNHiwMEhcVDSf4s6vX%2BtUDwgExEsK9SdGNNRwG693LQ9pWC92pdKrUkMoucjoXD7X0c9nVUW4CpiN55GOXyIciX%2BV6ao6HsMzo5Xt4nJXpdaAoEw21TDxDH91uxtNl0cWJJnmXkknjjk8aJfPVZNhkjsKmqgqhjFztIdhksKLP0GwCDRdkzdQFWaOQBlKc0QbhDKtTqQyHF9p4KY0uCr%2BtFn7poUd5xNQEUpoc3zGyGlsUXWdu6LKq2v8fuo4ouu7c0GUlPLX%2BV%2B8X4bXkpDLxdQXxLXZczQngvoKh6rzQbCFAn%2BHdRg3FkVy1706AL4r1SX4sR4X%2FtjlIKNdX2VQd%2FrcxbULJZB82KZZE%2BWyiaw5sOAid%2Bqqpb447RggsBptPGFCrb06ojmcaWLA0piZY2lbdX4CGt8i4Ih6aKPcYotlG8%2FCPAQUo6myPIsxU7DEmoGY2JXBbWrA7IUYpTnHOMMqk1lfKvc5cSnHELapYWHOoJXrV7s4cXxwlLq4%2B5Wlt5OyXak%2BHnUDxfHomQqK0U2eQgNtUr50aBuXQYJM0hm3TtIF9cjhyQa8qK1yGlkq0uRWelCfVTmV2nElyVp44IsCIUZIzdlcc0AdxPn1l4TF1pZkSSnFRjGCkVa7rKuZTXyF6TPVoLjplD66NUvZiMFH9IGUvpvIiWsN2m4ETnQoap0iqCJxgL1JNLXDqwTTFJTHyA6fxde2ZznSmMCfGqXihlknAMGVS5nhlwu94phPnmuLymjMzHX2Iy0Bc6yuy%2F8ZMV5cIwELTqKI7w6EnulnPc%2BI8m1uhjzk1%2BbzNL11OTKEEohVCzfPNhpvraJUADhJpW%2BOr3o257l0ySh9F8zagxZ7kVmymFluUMYG7ME3bMmzNdBy93IxQdUZ%2Fw%2BaZvTjyyNpXT1frAOlSSPBO2DpKRRQtNBiD1LCU34k4gdpZSXG8OGcEmKBYMG%2BpfXEXlnv6Z1sUOXSHxLGnf7qQH2LfBmgLCE7dQMpbGo67gGnhDf9tVK9IWxNT8GeiapRWEuD3OPp9VU9Y8swcZEHIGl%2FAn6dM1oNQo4j0tHJhDlLcYI1fty6aOcyUTKNsTYW05mq0sYl9nMzMtYnbdSDVmzt0zjD4cR69orhSgqOqWTW9Wo4aS0jrQVTFiwPyOTG%2BwC8cWE0riyzPrxUgxSgq%2FiWgD8y0hpHRRqyV78Oct%2FFDAPVRqtnpKasVc%2BZp%2BmtqLMcYeIoaX9fvsS9rtg5pFFnfoE9xtwZZVrT7yvrvcE94D27AuW0atoc%2BlaPfrnCZKJaV%2BwIozq3i256w%2BiwVQuH4AQ6kOMuDcDqHb6iFUDgbhAOdFCgPwqFP2GhDkb9sKBVJ0VOuitOD54Tk%2BJLkOzxKQ5gv2kgnM1Jb%2B9p2Q7DxOfXt6VAs92M%2FhUV15FA6p%2BrFQnv8Img1h3vMhPujFEiblHbhtBVNsNyntDLHFtPm2QUot7k%2B7wLqKxuUk39agu4QdR4Tov44R6hSBUOtO7pZxjJP%2F6bfr46LL6k%2F9CkttqICcs7JFwWbIROwGnoHWd%2B4WCXAwYGO5OSsvVsXPBr296GasTAdRVwilziOk%2Frt2Ntvv8ar9Au9Pv4P%3C%2Fdiagram%3E%3C%2Fmxfile%3E"></iframe>
+<body class="hero-bg">
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="min-h-screen py-12 px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12 fade-in-up">
+                <h1 class="text-5xl font-bold text-white title-glow mb-4">
+                    🚀 Cloud Computing Roadmap
+                </h1>
+                <p class="text-xl text-white/80 mb-8">
+                    Code once, scale infinitely - with the Cloud
+                </p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <p class="text-white/70 mt-2">
+                    Progress: <span id="progressText">0/13</span> completed
+                </p>
+            </div>
+
+<div class="roadmap-container rounded-2xl p-8 space-y-8">
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="1">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">1</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Fundamentals of Cloud Computing</h3>
+                        <p class="text-white/80 mt-1">Grasp the core concepts and benefits.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/523425/cloud-sunny.svg" alt="Cloud Fundamentals Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/what-is-cloud-computing/" target="_blank" class="resource-link">What is Cloud Computing?</a>
+                        <a href="https://azure.microsoft.com/en-us/overview/what-is-cloud-computing/" target="_blank" class="resource-link">Azure Cloud Overview</a>
+                        <a href="https://cloud.google.com/learn/what-is-cloud-computing" target="_blank" class="resource-link">Google Cloud Basics</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="2">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">2</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Cloud Service Models (IaaS, PaaS, SaaS)</h3>
+                        <p class="text-white/80 mt-1">Understand the different ways to consume cloud services.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/503378/services.svg" alt="Service Models Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/cloud-computing/iaas/" target="_blank" class="resource-link">IaaS Explained</a>
+                        <a href="https://azure.microsoft.com/en-us/overview/what-is-paas/" target="_blank" class="resource-link">PaaS Overview</a>
+                        <a href="https://www.salesforce.com/saas/" target="_blank" class="resource-link">SaaS Examples</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="3">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">3</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Cloud Deployment Models</h3>
+                        <p class="text-white/80 mt-1">Explore Public, Private, and Hybrid clouds.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/509930/deploy.svg" alt="Deployment Models Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/cloud-computing/public-cloud/" target="_blank" class="resource-link">Public Cloud</a>
+                        <a href="https://azure.microsoft.com/en-us/overview/what-is-private-cloud/" target="_blank" class="resource-link">Private Cloud</a>
+                        <a href="https://cloud.google.com/hybrid-cloud" target="_blank" class="resource-link">Hybrid Cloud</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="4">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">4</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Choosing a Cloud Provider</h3>
+                        <p class="text-white/80 mt-1">Begin your journey with a specific cloud platform.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/473859/aws-icon.svg" alt="Cloud Provider Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/free/" target="_blank" class="resource-link">AWS Free Tier</a>
+                        <a href="https://azure.microsoft.com/en-us/free/" target="_blank" class="resource-link">Azure Free Account</a>
+                        <a href="https://cloud.google.com/free" target="_blank" class="resource-link">GCP Free Tier</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="5">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">5</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Core Cloud Services (Compute, Storage, Networking)</h3>
+                        <p class="text-white/80 mt-1">Dive into the essential building blocks of cloud infrastructure.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/511394/data-storage.svg" alt="Core Services Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html" target="_blank" class="resource-link">AWS EC2</a>
+                        <a href="https://docs.microsoft.com/en-us/azure/virtual-machines/" target="_blank" class="resource-link">Azure VMs</a>
+                        <a href="https://cloud.google.com/compute" target="_blank" class="resource-link">GCP Compute Engine</a>
+                        <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" target="_blank" class="resource-link">AWS S3</a>
+                        <a href="https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction" target="_blank" class="resource-link">Azure Blob Storage</a>
+                        <a href="https://cloud.google.com/storage" target="_blank" class="resource-link">GCP Cloud Storage</a>
+                        <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Concepts.html" target="_blank" class="resource-link">AWS VPC</a>
+                        <a href="https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-overview" target="_blank" class="resource-link">Azure Virtual Network</a>
+                        <a href="https://cloud.google.com/vpc" target="_blank" class="resource-link">GCP VPC</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="6">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">6</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Database Services</h3>
+                        <p class="text-white/80 mt-1">Learn about managed databases in the cloud.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/503387/database.svg" alt="Database Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/rds/" target="_blank" class="resource-link">Amazon RDS</a>
+                        <a href="https://azure.microsoft.com/en-us/services/sql-database/" target="_blank" class="resource-link">Azure SQL Database</a>
+                        <a href="https://cloud.google.com/sql" target="_blank" class="resource-link">Google Cloud SQL</a>
+                        <a href="https://aws.amazon.com/dynamodb/" target="_blank" class="resource-link">Amazon DynamoDB</a>
+                        <a href="https://azure.microsoft.com/en-us/services/cosmos-db/" target="_blank" class="resource-link">Azure Cosmos DB</a>
+                        <a href="https://cloud.google.com/firestore" target="_blank" class="resource-link">Google Cloud Firestore</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="7">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">7</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Identity and Access Management (IAM)</h3>
+                        <p class="text-white/80 mt-1">Control who can access your cloud resources.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/504620/identity-card.svg" alt="IAM Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html" target="_blank" class="resource-link">AWS IAM</a>
+                        <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis" target="_blank" class="resource-link">Azure AD</a>
+                        <a href="https://cloud.google.com/iam/docs" target="_blank" class="resource-link">GCP IAM</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="8">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">8</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Cloud Security Best Practices</h3>
+                        <p class="text-white/80 mt-1">Secure your applications and data in the cloud.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/472659/shield-security.svg" alt="Security Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/security/security-best-practices/" target="_blank" class="resource-link">AWS Security Best Practices</a>
+                        <a href="https://docs.microsoft.com/en-us/azure/security/fundamentals/" target="_blank" class="resource-link">Azure Security</a>
+                        <a href="https://cloud.google.com/security" target="_blank" class="resource-link">GCP Security</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="9">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">9</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Cost Management & Billing</h3>
+                        <p class="text-white/80 mt-1">Optimize your cloud spending.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/513360/money-bill.svg" alt="Cost Management Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/aws-cost-management/" target="_blank" class="resource-link">AWS Cost Management</a>
+                        <a href="https://docs.microsoft.com/en-us/azure/cost-management-billing/" target="_blank" class="resource-link">Azure Cost Management</a>
+                        <a href="https://cloud.google.com/billing" target="_blank" class="resource-link">GCP Billing</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="10">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">10</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Serverless Computing</h3>
+                        <p class="text-white/80 mt-1">Build and deploy applications without managing servers.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/349479/serverless.svg" alt="Serverless Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/lambda/" target="_blank" class="resource-link">AWS Lambda</a>
+                        <a href="https://azure.microsoft.com/en-us/services/functions/" target="_blank" class="resource-link">Azure Functions</a>
+                        <a href="https://cloud.google.com/functions" target="_blank" class="resource-link">Google Cloud Functions</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="11">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">11</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">Containerization & Orchestration</h3>
+                        <p class="text-white/80 mt-1">Deploy and manage applications using containers.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/452140/docker.svg" alt="Containers Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://www.docker.com/get-started/" target="_blank" class="resource-link">Docker Basics</a>
+                        <a href="https://kubernetes.io/docs/home/" target="_blank" class="resource-link">Kubernetes Documentation</a>
+                        <a href="https://aws.amazon.com/ecs/" target="_blank" class="resource-link">AWS ECS</a>
+                        <a href="https://azure.microsoft.com/en-us/services/kubernetes-service/" target="_blank" class="resource-link">Azure Kubernetes Service (AKS)</a>
+                        <a href="https://cloud.google.com/kubernetes-engine" target="_blank" class="resource-link">GCP Kubernetes Engine (GKE)</a>
+                    </div>
+                </div>
+                <div class="roadmap-path"></div>
+            </div>
+
+            <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="12">
+                <div class="flex items-center">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="node-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="node-icon">12</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white">DevOps & CI/CD in Cloud</h3>
+                        <p class="text-white/80 mt-1">Automate your software development and deployment processes.</p>
+                    </div>
+                    <div class="svg-icon">
+                        <img src="https://www.svgrepo.com/show/373977/devops.svg" alt="DevOps Icon">
+                    </div>
+                </div>
+                <div class="content-area">
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="https://aws.amazon.com/devops/ci-cd/" target="_blank" class="resource-link">AWS CI/CD</a>
+                        <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/what-is-azure-pipelines" target="_blank" class="resource-link">Azure Pipelines</a>
+                        <a href="https://cloud.google.com/build" target="_blank" class="resource-link">Google Cloud Build</a>
+                        <a href="https://www.terraform.io/docs/" target="_blank" class="resource-link">Terraform Docs</a>
+                        <a href="https://docs.ansible.com/" target="_blank" class="resource-link">Ansible Docs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12 text-white/70">
+            <p class="text-lg">💡 Click on each node to explore resources and check off completed topics!</p>
+            <p class="mt-2">🎯 Track your progress and stay motivated on your journey</p>
+        </div>
+
+    <script>
+        // Initialize roadmap functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const nodes = document.querySelectorAll('.roadmap-node');
+            const checkboxes = document.querySelectorAll('.node-checkbox');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const totalNodes = nodes.length;
+            let completedNodes = 0;
+
+            // Create floating particles
+            createFloatingParticles();
+
+            // Animate roadmap paths on load
+            setTimeout(() => {
+                document.querySelectorAll('.roadmap-path').forEach((path, index) => {
+                    setTimeout(() => {
+                        path.classList.add('animated');
+                    }, index * 100);
+                });
+            }, 500);
+
+            // Load progress from local storage
+            loadProgress();
+            updateProgress();
+
+            // Add click functionality to nodes (for expanding content)
+            nodes.forEach((node, index) => {
+                node.addEventListener('click', function(e) {
+                    // Don't expand if clicking on checkbox
+                    if (e.target.closest('.custom-checkbox')) return;
+                    
+                    const contentArea = node.querySelector('.content-area');
+                    const isExpanded = contentArea.classList.contains('expanded');
+                    
+                    // Close other expanded nodes
+                    nodes.forEach(otherNode => {
+                        if (otherNode !== node) {
+                            otherNode.querySelector('.content-area').classList.remove('expanded');
+                        }
+                    });
+
+                    // Toggle current node's content
+                    contentArea.classList.toggle('expanded', !isExpanded);
+                });
+
+                // Add change listener to checkboxes
+                const checkbox = node.querySelector('.node-checkbox');
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        node.classList.toggle('completed', this.checked);
+                        updateProgress();
+                        saveProgress();
+                    });
+                }
+            });
+
+            function updateProgress() {
+                completedNodes = 0;
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        completedNodes++;
+                    }
+                });
+
+                const progressPercentage = (completedNodes / totalNodes) * 100;
+                progressFill.style.width = `${progressPercentage}%`;
+                progressText.textContent = `${completedNodes}/${totalNodes}`;
+            }
+
+            function saveProgress() {
+                const progress = {};
+                checkboxes.forEach((checkbox, index) => {
+                    progress[index] = checkbox.checked;
+                });
+                localStorage.setItem('frontendRoadmapProgress', JSON.stringify(progress));
+            }
+
+            function loadProgress() {
+                const savedProgress = localStorage.getItem('frontendRoadmapProgress');
+                if (savedProgress) {
+                    const progress = JSON.parse(savedProgress);
+                    checkboxes.forEach((checkbox, index) => {
+                        if (progress[index]) {
+                            checkbox.checked = true;
+                            checkbox.closest('.roadmap-node').classList.add('completed');
+                        }
+                    });
+                }
+            }
+
+            function createFloatingParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const numberOfParticles = 30; // Adjust as needed
+
+                for (let i = 0; i < numberOfParticles; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    particle.style.left = `${Math.random() * 100}vw`;
+                    particle.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5 to 10 seconds
+                    particle.style.animationDelay = `${Math.random() * 6}s`; // Stagger animation start
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

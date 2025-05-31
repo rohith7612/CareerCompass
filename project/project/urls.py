@@ -34,16 +34,17 @@ urlpatterns = [
     path('cybersecurity/',views.cybersecurity,name = 'cybersecurity'),
     path('mobile/',views.mobile,name='mobile'),
     path('fullstack/',views.fullstack,name='fullstack'),
+    path('machinelearning/',views.machinelearning,name='machinelearning'),
+    path('backend',views.backend,name='backend'),
+    
     
     path('register/',views.register,name='register'),
     path('login/',views.login,name='login'),
     path('success/',views.success,name='success'),
     path('loginsuccess/',views.loginsuccess,name='loginsuccess'),
-    path('posts/',include('posts.urls')),
     path('users/',include('users.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
     
-    
-    path('', include('code_assistant.urls')),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -37,6 +37,12 @@ def cybersecurity(request):
 def mobile(request):
     return render(request,'mobile.html')
 
+def machinelearning(request):
+    return render(request,'machinelearning.html')
+
+def backend(request):
+    return render(request,'backend.html')
+
 def register(request):
     return render(request,'register.html')
 

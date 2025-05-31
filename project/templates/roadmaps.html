@@ -22,7 +22,6 @@
         <div class="hidden md:flex space-x-6 items-center">
             <a href="{% url 'homepage' %}" class="nav-link text-gray-300 hover:text-white">Home</a>
             <a href="{% url 'companies' %}" class="nav-link text-gray-300 hover:text-white">Companies</a>
-            <a href="#" class="nav-link text-gray-300 hover:text-white">CodeSavant</a>
             <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
             {% if user.is_authenticated %}
             <form class="logout" action="{% url 'users:logout' %}" method="post">
@@ -132,6 +131,7 @@
                 </p>
             </div>
             </a>
+            <a href="{% url 'machinelearning' %}">
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-indigo-400 floating-icon">🧠</div>
                 <h2 class="text-2xl font-bold mb-4">Machine Learning</h2>
@@ -139,6 +139,9 @@
                     Deep dive into neural networks and advanced ML algorithms.
                 </p>
             </div>
+            </a>
+
+            <a href="{% url 'backend' %}">
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-teal-400 floating-icon">⚙️</div>
                 <h2 class="text-2xl font-bold mb-4">Backend Engineering</h2>
@@ -146,6 +149,8 @@
                     Master server-side technologies and system design principles.
                 </p>
             </div>
+            </a>
+            
             <a href="{%url 'fullstack' %}">
             <div class="roadmap-card bg-gray-800 p-6 rounded-lg">
                 <div class="text-5xl mb-4 text-orange-400 floating-icon">🌈</div>

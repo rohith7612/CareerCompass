@@ -3,10 +3,775 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full stack Development</title>
+    <title>Frontend Development Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .roadmap-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .roadmap-node {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            background: #1a1a2e;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .roadmap-node:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .roadmap-node.completed {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #1a1a2e, #064e3b);
+        }
+
+        .roadmap-path {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(to bottom, #3b82f6, #7c3aed);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .roadmap-path.animated {
+            animation: pathGrow 0.8s ease-out forwards;
+            transform-origin: top;
+        }
+
+        .node-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+        }
+
+        .roadmap-node:hover .node-icon::before {
+            transform: rotate(45deg) translate(100%, 100%);
+        }
+
+        .svg-icon {
+            width: 48px;
+            height: 48px;
+            margin-left: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .svg-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #3b82f6;
+        }
+
+        .content-area {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-area.expanded {
+            opacity: 1;
+            max-height: 300px;
+            padding-top: 1rem;
+        }
+
+        .resource-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            background: linear-gradient(135deg, #3b82f6, #1a1a2e);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .resource-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .resource-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #3b82f6;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); }
+        }
+
+        @keyframes pathGrow {
+            from { transform: translateX(-50%) scaleY(0); }
+            to { transform: translateX(-50%) scaleY(1); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff, #e5e7eb);
+            border-radius: 6px;
+            transition: width 1s ease-out;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .title-glow {
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Custom Checkbox Styles */
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #10b981;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .custom-checkbox .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .svg-placeholder {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #3b82f6;
+            text-align: center;
+            line-height: 1.2;
+            margin-left: 1rem;
+        }
+    </style>
 </head>
-<body>
-    <h1 style="text-align: center;">Full Stack Development </h1>
-    <iframe frameborder="0" style="width:100%;height:4674px;" src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=full_stack.html#R%3Cmxfile%3E%3Cdiagram%20name%3D%22Page-1%22%20id%3D%226F0awwH8_qz5QZrCatGM%22%3E7V1dd5u41v41vbQXkvi8TJOmM7PaSU7ceTvnktiKQ4vBB3CT9Ne%2FwjYEJBmLVIjNrDlrzUmNsRLv%2FWh%2FPHtr845cbp4%2FZuH28XO6ovE7bK2e35GrdxgTH3vsR3nl5XAFudg9XFln0ep47fXCIvpJjxet49VdtKJ568YiTeMi2rYvLtMkocuidS3MsvSpfdtDGrd%2F6zZcU%2BHCYhnG4tWv0ap4PFytv1d5%2FTcarR%2Br34zc4PDOJqxuPn6T%2FDFcpU%2BNS%2BTDO3KZpWlx%2BNfm%2BZLGpfQquRw%2Bd33i3foPy2hSqHzgN3tl%2F5Flgbd42UR397cXf%2F3xcXZc5UcY745feFGEWcEuXe%2F2n2Yvl9%2FZz0v2e2h2%2FCbFSyWep8eooIttuCxfPzEMvCPv8yJLv9fSYt%2FzfZbukhUt%2Fw7EXj1EcXyZxmm2X4JQtHKoV3%2Bu8U7geiR02TviV63%2BbpoV9Llx6fjVP9J0Q4vshd1yfNe2jrg7ArHSytOrUhleD9ceGwq1%2FSOWjjha1yu%2Fipr94yjtHpLHguRvs3SdhZtNlKz38k9W4YZ94TDOhxA7E7q%2FsmVi9%2FE9cTWJnfhBS%2BwI%2BaLcHd%2Bg3Ikg9%2BssTQqarNjVK%2FqDxum2FPsQMn94eMDLpUzmK%2FfedYaCuiuRObYNytwWZP6eWRUjIjdlXZw2zAlCosxRYFDmjiDzyzSjpSVPkyXdFqJRyR7Tzf0ul8pYpom23DVIkUlt3paj6wpSRA4WpVhf7CHGv3Ka3dx%2FK4MGbMXhPYtc9h%2B9Cotw7%2Fiy3bLYZfQoqDhKvh9ueCyKMvi4KBfG109PT%2FNlusvYauE8zZjpvo5pmCXs54qtNMu5dY7RS%2Bfv6lSs25DhEQi%2FuGU0qG6GfaulOSL6V%2BQhLfhnLxu669TlRbxOs6h43LxdiWG9xIxJqEASLfK%2FpVN93iTUxxy3qD%2FiDaU%2FNZPmCybt5ua2y6KNJU3kcpshkOyG6h4j3iAQRLe4%2BfQ7%2B2ndZlGyjLYxBSM%2BZPmcGyBIZk0cg%2FKr%2FoCGAH%2F78vkTW%2BtysRgibjETntsOOg9UoictOmWjSzk63eZ5dYgRaTbfpD%2BZnCobTZPZX4vy%2FXTJ0Hv9ld6z%2Fz%2FoRTDSjV%2FTremmxMAYaOQH3J6wfYmqLD2ZVA8Py%2BBPNCqv3k0t3b3%2Bkm7VYYiqI4i0FOdUbrShuEDPFuuhtzuab9Mkj37QfQ6WR%2BukW41P9H7OVMn%2BldUfnbGLs9X%2Bw7P7MI%2F2ipTo7%2BQv61YngahOl7R9u2NL9qGvJ9Proc9FmJfCX9Qb6JQec3bjLA6TNQt4N4ftt9vTTEWUJhLdHRY%2BrywbpLIC3DaaWBbW6gnE3hzWIjFV%2FyP8ES6WWbSdMg3FxRauJYst9NBQp3bFhwXLlt9r9E%2B8YlpbhX%2BzW%2Bsg83iRgvEksfdw7kpxx3jCjrm6%2BcwufA6TaLuLG7YMgEiD9j7wPDKYw1AUn5hIX%2BQvyXKfDTZqEDDkV9uNSn4SagJbemz4KTvy5WVLmzu7i0cq2L35%2Ft69lz0Yk6MRkRgNfuluzQUQjYZvcxpyZJZeT7r%2BZpuBxQy%2BUfi5ZqCnT2n2fcK1NhvZbTUEko2C3EE3yh0Nl2f2SFbe8i1vb4w1LQpmc2Z5WX2mq%2FljsYklm6WxfLeyYSbxXnufBJIiNNJkyXqkDv%2B3o%2FNvZwjyHztaq2zfksF%2BRgkT2Wq3LJ3tKYU11%2B7WGMjcHfuEC4cCR5JBWIPZtpOFjWTNwpysW2nh4aZ5lNYbTVBQa6FuDcFMx%2B12hhfYYuEVaTJ6b%2Fc9YgF8wRJueohYwzWdeMMBdrhdgiwZY68pbTjte1a753O%2Bh90yry2Z1MPUi3Sr1IG4GzDh7RWypDyxnrS7n5M5oxvmYp7nTT8jdydKygGZWxOn3ZeDkCe2NwRjh8liav3n%2Bu5Zi3HSYe6rRo9ahhJGL9Bj7hUFJibTr81Nn0oXzOz7pLMKwbg7diAx7npKT6fsx5%2Fp6nyUmrCb%2BMwiZn42L%2BTmpLVot5ZBJt4z4vG6cX0s6gYZj09vX4rH9ExFqVTQfLu%2F8agyIldTc7Hu3k4LopYw4vsZWCIoiVIt40WjkrBW0FGahcuYHutFtGyK%2Brb%2FoExXr0t2awpkgu47trCfHJGtrYpKY%2FloggWX8zEF46FtAe0ym%2BSb7H6qOlikPnpY6s9UyzfXZu95oovGVU%2FyUMW2521G8%2Fysl6aH%2B5ijPlgUiRXhl%2BrWLsjS80wImwJLUvghg9mSk%2F3N31hQmiqY%2FdX%2Bxm2Wlmuc1lVzvW49wUyZHb6zCvmBRFHIOC%2B72GaHo0DvyzNinfrK97ceiL6jwvL68uy%2B%2Fny7s0Ncv1t%2FILNqDwv%2BJkCS%2FMQebKMp%2BiAxsb4O8%2BLi9ncontuvUrh6H%2FiyfaBHjopCE5Pr8sjEfZhPOqUWQ6TAFZsCdfkGRVGLLeJ39NBJEcaCrMc%2FK2S3wYqtqvrZlCCWGO36ooaQ5zbNi3VGF%2F%2F51G2fy76A7eHe%2FH%2Fx2Z4Aftnuw3Uwk16eiH7tI29ZZeNe9fPLWW2t6I%2F55qVUVN0iKddTY61uFYHMdjG%2FhaQaskY%2B9FP57SYhndZih2SSPJc361KjJGP4q2saTNLnlEXjV%2Bd6Hsv4flPeubo%2FHdm3lupWEszasMMDXFYcxsbJ0Tu6is7kyFl5S12472zQbqzWrSOQabLvYcFRSLQUjG2FxB5tFrlPmTFy%2BbQXI0ci92H7Ku8%2BLL6c2wh58bCLw200T%2BiJMs7rKt06BJm%2FIpfnnF%2F7q43UhU%2FpZj%2FR51yotC5vqiPa6sy0REet1brVBPKENCFKakKaZsi83VCJGfNXer9Il98pnAPSjuvywiSy0yG2HtArSk5MgC92xSP7ltFS34GCcQgHgjhpS8oDyNXjY08WG7%2BeMfXfnopDxNNsLD1RZfyqYvAdmJkx4qBvS9rlqzMj5sz9TQn2bgWlIbvl6IaxXDGNVbpVAzIjJiJr4cgGmQzXPqc420fMiRc0z9l2AWPi%2BUYt%2BXl1pKdpSFFqYhX4iv64YQAvGUE33Gz3X926ots4fZl2Sy7xBQ%2FrSqoi2Bn2OMjH6Ezhah0Vs3y5aRJtYugYqVSnHJDpLYvbeT14rrgRqgYJg1XgMiLMupVzqALvb%2Bwo%2FzYW6lYQyPKvw50Qx55sBMpwxV9F0%2BUKpuvyd7ba5RUUe%2B8JA0qwLzsDYOlBuqLYxJrrZZzuVuzSbRwWD2m2mXIZEfPdn9ivhiK1BiUNe8b%2B4uuZiRN7MxI%2Bsf824c80OW1K6pW6lepDtCN8PZJYksBRE5vWw8xf%2FNxlVEE9m2iZpXn6UNRdnrNdWZwMD5%2BXaut16W59gWydJsKZJWJJ%2BE9d9qoP73Z5262wZWnC5us0XddNuScO99VLdQ%2BUBJkmuz43msySDNoZbs6OmoNxq6%2FVGAtHmWh2UNyyj3mQy%2FJZTY2hijITk9cvNC90TZwYadZNu%2F%2BWICTp5xm4%2F%2FavpEyUrJYwT3Jt7KZvefNkMH8EX2JOZL%2BgW9Ugy8JCpEqwjJvQRD6%2F3baIh4Z%2FTwq6zo5ktKVz1%2Bgw2DZfISHYlXjUwOTkcVes237AH%2BAJD7uWIDzZYDlN%2FVKKwhOzzv0ULGtBl7ssKl6GMNimKiJeW9rEEtkx5OgxAacnn365PZM7vU5dzEuZnwjFZVrp1izIGiviZjkQ%2BYzTkYc5uGKF9fLmTs8QYA1CJHwiaksILU2HdRUFJhZW%2F9Y0NFmH2%2FL5iXekjuaamYbJUnQ1J6gJscXdNRSR%2BY4oMslO1dSyoigyMRO7pVnJ8IXJkg7hqAxlFoTLLKSH7x2TCZwnJnCf0pAlDNb7MGbSBhRWuTxDSmTVF12dD4riE8uQl%2BHyEZDUCOJ7MoknG1WmaaySotjEdOjy6k8oInOFU2jEk8TvmghgRYmJuc%2FNtog20U9Q81G96pRZ5xZ19PTVKUpOTHy%2BsHibbxT4sEzzl7ygmyHci6E8yBLyTl%2FiYDA2GTB6YtnuNlx%2BL5%2FUWA1My8A0uggtQ7aMqDY74NeTzCRiXzuGJDbh2LVtSZ5ThzA2KTcxU%2FkS5uXjL%2B92SQJIeq4tSk%2BGOtmz0gaTni9mLZ%2FTJCrSbNrcvt0e22YjWQSu6dlYipIWk51P6XoNKITErmAWiTSENEkGV11WTTI4yxhmsPUlYw4GkPzcSli19GTb2%2BgjxHwxb7lIwviliJZg7KLv8GG4XHCazvwpCk7y%2BNNdFJcJ822aFQ9pHOmZ3jQSk044gfsS8%2BiaDN99MfG52G7j8o9%2B2O%2F2P9L7KR%2Fd4yXuyp5qY1biYsIkyHe5y37UgtsXmS%2FK57OzC0masHve02RVXbmP0%2BX38tJzVPzNXpdJyuHVf8sF5hba38%2F%2B9Ma75cv%2F7l%2Fu31Y0Lnm6y5a047sd72N%2F8JoWHfcdvzFdtR4oL2ox20%2FV%2BEFbf4VMI%2FuPMomEL40btmmUHA9yNRVWr%2F8LOhSzriF12FeB5Qevyh1gVS9eji%2FerlqsqFoyddWK%2BeDAqjWgO3skpWyeb8trr%2FbY4WI1VD%2ButFrkALDjxwZQr5i2dqt3FeaPrRe3YVHQLNn7OGyRNyCgof%2FGbv67udNf31NFx%2F5jr2%2FtX1XvPcTp00USbQ5c5q8aeVVL4EzcEgRijj4qVPR5Ab14cBTx4BrGg9wCIe4RWceZUA3wHFbUCyWRhABkdaYIJg8EmGaIe8Jpha5h0SRyM2OiSWN4Og6WfBhY8ttQwq4JKIlElXEozX0ctIyTy9IrbZAqX9zSLGKSotmoMAtAwAzzMMMmYCbSet0w%2B1XOA5vjPIii%2BqtEZ7rxsEgVjhvEuFwUYwctNYsMpNZtX%2BnzvOIRiI1P%2BDIJMrHx%2B5KdQ%2FgX5PKMaKd%2FAeVc1FFmmlM9gTK3jTLHSEDcl47ViDJlFPXCxXl1m%2BZZ5er2qlNLlVE55iZSdYtsIPcwZNvmyMDD9hiMDAz6cr36rRN61%2FRomM%2FL0Vst01hWyDTTfAKWnK8jvgkr1JdaHq4o1AMoJkAxdSa45gzhhL791K%2FZGqhmvAgG5Ys5ytc1kfKi6rF1oIOSk3yeKceiDCUYhC%2F22w2ObpdjET5tO%2B1oyXXMxjv1hJZR0zFvCDc2FixhcMceF0i7gRELNz553A6fO6taEwATDIbY5xjiykoNDKahKOImP8j1V1i22KbY1Uexf8XzPSeBcb4LbixG%2BGxbjnnHBI1b9m05Mk5YFoPdN6pZV7Xi2BETBy2%2Fq6wpfJpjE1E9kstQu1g9QWPUiMnyOf66A40zaXlrLAwCIaVJO2r3zYRHI7LSkvCoP2hMBUjqcAJCevMmzQychmpM7o2JZrW1YZT6l8p%2BIXSS88zKYBslxsJt1BiPsUC3Pr%2BJwxyyWf48Bk3T2icCrFMx0rDmCAGgxOd2h387UzrT7MKUQQODEq%2BaP2rQIDOgGb8PWmSMhsvyxjVPMBhznppkbqhPAuiR9og%2BVDeYmMoAq8aaf2LvojKWTNPc%2BrU4Plf9K8GPsVTMV0UEDK56hvipdcg5TqYZ2JP1pauHxpM3ZkeAMmyIacpbDhskTO1DTmAENuPz3FMomanjCQbJHUjwZBvB0%2Fj0dBtP3tQBBYOx9vFYBgrOZIseYDEBjKkPtqgfIAomZOHP7xgNWYjquS0Co6VZNAi%2BiQM8qGpKGZXnw%2FBbxtTxBIM2JrYIKCMhC4ZAHE%2BgB1EdUDAoZV%2BMgX3HCKCgkcpAY2B1QMFgjgNL4vKMAMos4zt6DKwOjMnTwBgaDSyc%2BHur%2Bs11IBLllAkGR4wRV0IKjvM%2BFVsQHcEMedVRvzOtGyJdHfBPA8LIsucetur%2FkfbKQ1e3MDQeu8%2FMO2nN9Y3121%2FYD3KYK2wQe%2BBepBOAbm8HbHl9tgMLNwUIe4Fh0P7LovcB5nkcwmDRCWeocXXCaOBwDxqHri0mGMnvV4%2BmHBlOri847sBIbRiP3%2Fg9hV6DCibn8QSj7dsNeDxhyzeCp%2FGJ%2Bym4O3U8wWD0A6dPIKYPTWDGlPQ9dWLCdU1%2BVAkBQK%2B32dDOfkZR%2FcZ4DFv1XLYNg2DHAhGB0XEcxbAWg4xPsE%2BiBKgOKBgEO3EFQGEjJcCqyebfEqAuQAEZQ2LZIqBMNCmQvrS%2BsYe2mKcj1UFjmp7vOhrJ44ZU5JUpTpGMSISfHGHceQJXTMlMmSVVXtGB0e2NPcEs2V1jacXTckQo29iIw%2BfQp3fJ%2BJx3nyBszHkC6vgEwntbHBFg%2ByaIAAKN9wb7UBp1QMFgvj3MA8oxAig4veOmiCV1ZEy%2BfZyMz0K3Q54AKrHkqPZTOTCIaOQJ4bfrGuEBIPSWT4AHUAcUjN5yT6yUeUaIJXt88hv9g9AEg%2FdGlsQ%2BGSm82n2J74k3AqsjwzSBrT2aqYrFYKKZfo8k0mwRPFW9w%2BCZkVi4CLARgwCgfXwKlTB1QAFpERcJ6MCMhwHQfj2JCFgVUC4MytkTTlfiwMhhOHt8mniYXjGD6bsy1mDQx77Q52oKa30JZBDh8TBVV3XQmKaI9YfO0NqbXbsDGibmoVc6Pa98GJ3MmPAWgyAz8fP4HHKPo9rjTkVXBxUMFtkTzv8TZMYNAWCRFf3UVBAFg0YmQlZGkJEDPE5fGvkf0CKvDg7TrLD2AMbpS%2BsOHsCMSf5V%2BjyveBhdy%2BLsTkKMVCur5g4wsPHcScAGBmeMBUaG2MQIbMbnjIeoSZrjY9SRBoNMFqvfxDaSXTnjk8k9sqvxyGRlQHkwyORATNcNeby%2BZDIIgs8EMEwzv%2Fpj4PGbf3uQeAY4vEql53VvmsA9EQYL0%2FGIayaegUb%2Fdh8whoQcGOwvEuMTM%2B2ezqTY31GpOnVMASF%2FMX%2FEiri%2BiZOfVQPJv5jSiCkY9G8g0r%2BukfmvLhj61xj7q46NybO%2FVdcGmPgFZpLsKedCMGhhoUecBEbC4apuAgZOQEkXdTzB4IuR0FVFzLSEuv9MvngsNMHghH2RwjPTo%2Bf25YQnTuEpA8M3ze3qD2TGb%2FXlKDy%2Fl%2Fr1WoRKn%2BcVD6NrFwn1SBubyW7GZ34nUSVSBxQMQtgTDkXZZqa5ueMTwsMcORgLTzBo4kDIqGxsGcFTX5q4%2F5gtBUicCG4GCFnUgWGa6z09sM0nPDZQYLV%2Fz9ADsapuD0OR7YGJ69en%2BQuYsFUxAXdgMXuZpWnRvD0Lt4%2Bf0xUt7%2Fh%2F%3C%2Fdiagram%3E%3C%2Fmxfile%3E"></iframe>
+<body class="hero-bg">
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="min-h-screen py-12 px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12 fade-in-up">
+                <h1 class="text-5xl font-bold text-white title-glow mb-4">
+                     Fullstack Development Roadmap
+                </h1>
+                <p class="text-xl text-white/80 mb-8">
+                    From pixel to process - mastering the full journey
+                </p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <p class="text-white/70 mt-2">
+                    Progress: <span id="progressText">0/13</span> completed
+                </p>
+            </div>
+            <div class="roadmap-container rounded-2xl p-8 space-y-8">
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="1">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">1</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Frontend Fundamentals</h3>
+                <p class="text-white/80 mt-1">Start with the building blocks of the web interface</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/158167/web-development.svg" alt="Frontend Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" class="resource-link">HTML</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" class="resource-link">CSS</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" class="resource-link">JavaScript</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="2">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">2</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Frontend Frameworks/Libraries</h3>
+                <p class="text-white/80 mt-1">Build dynamic and interactive user interfaces</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/88181/frames.svg" alt="Frameworks Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://react.dev/" target="_blank" class="resource-link">React.js</a>
+                <a href="https://vuejs.org/" target="_blank" class="resource-link">Vue.js</a>
+                <a href="https://angular.io/" target="_blank" class="resource-link">Angular</a>
+                <a href="https://svelte.dev/" target="_blank" class="resource-link">Svelte</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="3">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">3</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Backend Language & Runtime</h3>
+                <p class="text-white/80 mt-1">Choose your server-side programming environment</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/452093/python.svg" alt="Backend Language Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://nodejs.org/en/" target="_blank" class="resource-link">Node.js (JavaScript)</a>
+                <a href="https://www.python.org/" target="_blank" class="resource-link">Python</a>
+                <a href="https://golang.org/" target="_blank" class="resource-link">Go</a>
+                <a href="https://www.ruby-lang.org/en/" target="_blank" class="resource-link">Ruby</a>
+                <a href="https://www.java.com/" target="_blank" class="resource-link">Java</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="4">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">4</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Backend Frameworks</h3>
+                <p class="text-white/80 mt-1">Build robust server-side applications</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/369591/flask.svg" alt="Backend Framework Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://expressjs.com/" target="_blank" class="resource-link">Express.js (Node.js)</a>
+                <a href="https://docs.djangoproject.com/en/stable/" target="_blank" class="resource-link">Django (Python)</a>
+                <a href="https://flask.palletsprojects.com/en/latest/" target="_blank" class="resource-link">Flask (Python)</a>
+                <a href="https://rubyonrails.org/" target="_blank" class="resource-link">Ruby on Rails (Ruby)</a>
+                <a href="https://gin-gonic.com/docs/" target="_blank" class="resource-link">Gin (Go)</a>
+                <a href="https://spring.io/projects/spring-boot" target="_blank" class="resource-link">Spring Boot (Java)</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="5">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">5</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Databases</h3>
+                <p class="text-white/80 mt-1">Store, manage, and retrieve application data</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/532349/database.svg" alt="Database Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.postgresql.org/docs/" target="_blank" class="resource-link">PostgreSQL (SQL)</a>
+                <a href="https://www.mysql.com/documentation/" target="_blank" class="resource-link">MySQL (SQL)</a>
+                <a href="https://www.mongodb.com/docs/" target="_blank" class="resource-link">MongoDB (NoSQL)</a>
+                <a href="https://redis.io/docs/" target="_blank" class="resource-link">Redis (Cache/DB)</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="6">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">6</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">API Design & Development</h3>
+                <p class="text-white/80 mt-1">Enable communication between frontend and backend</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/521639/api.svg" alt="API Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://restfulapi.net/" target="_blank" class="resource-link">RESTful APIs</a>
+                <a href="https://graphql.org/learn/" target="_blank" class="resource-link">GraphQL</a>
+                <a href="https://swagger.io/docs/" target="_blank" class="resource-link">OpenAPI/Swagger</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="7">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">7</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Authentication & Authorization</h3>
+                <p class="text-white/80 mt-1">Implement secure user access and permissions</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/393275/security-authentication-authorization.svg" alt="Auth Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://jwt.io/introduction" target="_blank" class="resource-link">JWT</a>
+                <a href="https://oauth.net/2/" target="_blank" class="resource-link">OAuth 2.0</a>
+                <a href="https://firebase.google.com/docs/auth" target="_blank" class="resource-link">Firebase Authentication</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="8">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">8</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Version Control</h3>
+                <p class="text-white/80 mt-1">Manage changes to your entire codebase</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/473619/git.svg" alt="Git Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://git-scm.com/doc" target="_blank" class="resource-link">Git Documentation</a>
+                <a href="https://github.com/" target="_blank" class="resource-link">GitHub</a>
+                <a href="https://gitlab.com/" target="_blank" class="resource-link">GitLab</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="9">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">9</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Cloud Platforms & Deployment</h3>
+                <p class="text-white/80 mt-1">Deploy and host your fullstack applications</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/449015/deployment.svg" alt="Cloud Deployment Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://aws.amazon.com/" target="_blank" class="resource-link">AWS</a>
+                <a href="https://cloud.google.com/" target="_blank" class="resource-link">Google Cloud Platform</a>
+                <a href="https://azure.microsoft.com/en-in/" target="_blank" class="resource-link">Azure</a>
+                <a href="https://vercel.com/" target="_blank" class="resource-link">Vercel (Frontend)</a>
+                <a href="https://render.com/" target="_blank" class="resource-link">Render (Backend)</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="10">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">10</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Containerization & Orchestration</h3>
+                <p class="text-white/80 mt-1">Package and manage your applications efficiently</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/373977/docker.svg" alt="Containerization Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://docs.docker.com/" target="_blank" class="resource-link">Docker</a>
+                <a href="https://kubernetes.io/docs/home/" target="_blank" class="resource-link">Kubernetes</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="11">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">11</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">CI/CD (Continuous Integration/Deployment)</h3>
+                <p class="text-white/80 mt-1">Automate your development pipeline</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/353928/jenkins.svg" alt="CI/CD Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://docs.github.com/en/actions" target="_blank" class="resource-link">GitHub Actions</a>
+                <a href="https://about.gitlab.com/topics/ci-cd/" target="_blank" class="resource-link">GitLab CI/CD</a>
+                <a href="https://www.jenkins.io/doc/" target="_blank" class="resource-link">Jenkins</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="12">
+        <div class="flex items-center">
+            <label class="custom-checkbox">
+                <input type="checkbox" class="node-checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <div class="node-icon">12</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Testing (Frontend & Backend)</h3>
+                <p class="text-white/80 mt-1">Ensure the quality and reliability of your entire stack</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/301428/testing-flask.svg" alt="Testing Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://jestjs.io/" target="_blank" class="resource-link">Jest (Frontend)</a>
+                <a href="https://testing-library.com/" target="_blank" class="resource-link">React Testing Library</a>
+                <a href="https://docs.pytest.org/en/stable/" target="_blank" class="resource-link">Pytest (Backend)</a>
+                <a href="https://www.cypress.io/" target="_blank" class="resource-link">Cypress (E2E)</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-12 text-white/70">
+        <p class="text-lg">💡 Click on each node to explore resources and check off completed topics!</p>
+        <p class="mt-2">🎯 Track your progress and stay motivated on your fullstack development journey</p>
+    </div>
+</div>
+
+    <script>
+        // Initialize roadmap functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const nodes = document.querySelectorAll('.roadmap-node');
+            const checkboxes = document.querySelectorAll('.node-checkbox');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const totalNodes = nodes.length;
+            let completedNodes = 0;
+
+            // Create floating particles
+            createFloatingParticles();
+
+            // Animate roadmap paths on load
+            setTimeout(() => {
+                document.querySelectorAll('.roadmap-path').forEach((path, index) => {
+                    setTimeout(() => {
+                        path.classList.add('animated');
+                    }, index * 100);
+                });
+            }, 500);
+
+            // Load progress from local storage
+            loadProgress();
+            updateProgress();
+
+            // Add click functionality to nodes (for expanding content)
+            nodes.forEach((node, index) => {
+                node.addEventListener('click', function(e) {
+                    // Don't expand if clicking on checkbox
+                    if (e.target.closest('.custom-checkbox')) return;
+                    
+                    const contentArea = node.querySelector('.content-area');
+                    const isExpanded = contentArea.classList.contains('expanded');
+                    
+                    // Close other expanded nodes
+                    nodes.forEach(otherNode => {
+                        if (otherNode !== node) {
+                            otherNode.querySelector('.content-area').classList.remove('expanded');
+                        }
+                    });
+
+                    // Toggle current node's content
+                    contentArea.classList.toggle('expanded', !isExpanded);
+                });
+
+                // Add change listener to checkboxes
+                const checkbox = node.querySelector('.node-checkbox');
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        node.classList.toggle('completed', this.checked);
+                        updateProgress();
+                        saveProgress();
+                    });
+                }
+            });
+
+            function updateProgress() {
+                completedNodes = 0;
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        completedNodes++;
+                    }
+                });
+
+                const progressPercentage = (completedNodes / totalNodes) * 100;
+                progressFill.style.width = `${progressPercentage}%`;
+                progressText.textContent = `${completedNodes}/${totalNodes}`;
+            }
+
+            function saveProgress() {
+                const progress = {};
+                checkboxes.forEach((checkbox, index) => {
+                    progress[index] = checkbox.checked;
+                });
+                localStorage.setItem('frontendRoadmapProgress', JSON.stringify(progress));
+            }
+
+            function loadProgress() {
+                const savedProgress = localStorage.getItem('frontendRoadmapProgress');
+                if (savedProgress) {
+                    const progress = JSON.parse(savedProgress);
+                    checkboxes.forEach((checkbox, index) => {
+                        if (progress[index]) {
+                            checkbox.checked = true;
+                            checkbox.closest('.roadmap-node').classList.add('completed');
+                        }
+                    });
+                }
+            }
+
+            function createFloatingParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const numberOfParticles = 30; // Adjust as needed
+
+                for (let i = 0; i < numberOfParticles; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    particle.style.left = `${Math.random() * 100}vw`;
+                    particle.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5 to 10 seconds
+                    particle.style.animationDelay = `${Math.random() * 6}s`; // Stagger animation start
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
