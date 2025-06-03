@@ -18,7 +18,6 @@ def register_view(request):
     return render(request,"users/register.html",{"form" : form}) 
 
 def homepage(request):
-    #return HttpResponse("Hello, world!")
     return render(request,'home.html')
 
 def success(request):
@@ -44,3 +43,13 @@ def logout_view(request):
     if request.method == "POST":
         logout(request)
         return redirect("homepage")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
