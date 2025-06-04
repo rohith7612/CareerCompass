@@ -29,11 +29,6 @@
             border-color: #3b82f6;
         }
 
-        .roadmap-node.completed {
-            border-color: #10b981;
-            background: linear-gradient(135deg, #1a1a2e, #064e3b);
-        }
-
         .roadmap-path {
             position: absolute;
             left: 50%;
@@ -192,23 +187,6 @@
             animation: fadeInUp 0.8s ease-out forwards;
         }
 
-        .progress-bar {
-            height: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 2rem 0;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ffffff, #e5e7eb);
-            border-radius: 6px;
-            transition: width 1s ease-out;
-            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
-        }
-
         .floating-particles {
             position: fixed;
             top: 0;
@@ -247,64 +225,6 @@
 
         .title-glow {
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-
-        /* Custom Checkbox Styles */
-        .custom-checkbox {
-            position: relative;
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            margin-right: 1rem;
-            cursor: pointer;
-        }
-
-        .custom-checkbox input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 24px;
-            width: 24px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .custom-checkbox:hover .checkmark {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: #3b82f6;
-        }
-
-        .custom-checkbox input:checked ~ .checkmark {
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-color: #10b981;
-        }
-
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-
-        .custom-checkbox input:checked ~ .checkmark:after {
-            display: block;
-        }
-
-        .custom-checkbox .checkmark:after {
-            left: 7px;
-            top: 3px;
-            width: 6px;
-            height: 10px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
         }
 
         .svg-placeholder {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Engineering Roadmap</title>
+    <title>Frontend Development Roadmap</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/rd.css' %}">
 </head>
@@ -14,187 +14,323 @@
     <div class="min-h-screen py-12 px-4 relative z-10">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12 fade-in-up">
-                <h1 class="text-5xl font-bold text-white title-glow mb-4" data-roadmap-type="{{ roadmap_type }}">
-                    {{ roadmap_metadata.title }}
+                <h1 class="text-5xl font-bold text-white title-glow mb-4" data-roadmap-type="Aiengineering">
+                    AI Engineering Roadmap
                 </h1>
                 <p class="text-xl text-white/80 mb-8">
-                    {{ roadmap_metadata.description }}
-                </p>
-                
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: {{ progress_percentage }}%"></div>
-                </div>
-                <p class="text-white/70 mt-2">
-                    Progress: <span id="progressText">{{ completed_count }}/{{ total_nodes }}</span> completed
+                    Turning data into decisions - AI that thinks ahead
                 </p>
             </div>
-
-            <div class="roadmap-container rounded-2xl p-8 space-y-8">
-                <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="1">
-                    <div class="flex items-center">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" class="node-checkbox" 
-                                   data-node="1" 
-                                   data-roadmap="{{ roadmap_type }}"
-                                   {% if user_progress.1 %}checked{% endif %}>
-                            <span class="checkmark"></span>
-                        </label>
-                        <div class="node-icon">1</div>
-                        <div class="flex-1">
-                            <h3 class="text-xl font-semibold text-white">Foundational Math & Statistics</h3>
-                            <p class="text-white/80 mt-1">Grasp the mathematical backbone of AI</p>
-                        </div>
-                        <div class="svg-icon">
-                            <img src="https://www.svgrepo.com/show/511394/calculator.svg" alt="Math Icon">
-                        </div>
-                    </div>
-                    <div class="content-area">
-                        <div class="flex flex-wrap gap-2 mt-4">
-                            <a href="https://www.khanacademy.org/math/linear-algebra" target="_blank" class="resource-link">Linear Algebra</a>
-                            <a href="https://www.khanacademy.org/math/calculus-1" target="_blank" class="resource-link">Calculus</a>
-                            <a href="https://www.khanacademy.org/math/statistics-probability" target="_blank" class="resource-link">Probability & Statistics</a>
-                        </div>
-                    </div>
-                    <div class="roadmap-path"></div>
-                </div>
-
-                <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="2">
-                    <div class="flex items-center">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" class="node-checkbox" 
-                                   data-node="2" 
-                                   data-roadmap="{{ roadmap_type }}"
-                                   {% if user_progress.2 %}checked{% endif %}>
-                            <span class="checkmark"></span>
-                        </label>
-                        <div class="node-icon">2</div>
-                        <div class="flex-1">
-                            <h3 class="text-xl font-semibold text-white">Programming Fundamentals (Python)</h3>
-                            <p class="text-white/80 mt-1">Master the primary language for AI</p>
-                        </div>
-                        <div class="svg-icon">
-                            <img src="https://www.svgrepo.com/show/452091/python.svg" alt="Python Icon">
-                        </div>
-                    </div>
-                    <div class="content-area">
-                        <div class="flex flex-wrap gap-2 mt-4">
-                            <a href="https://docs.python.org/3/" target="_blank" class="resource-link">Python Docs</a>
-                            <a href="https://www.codecademy.com/learn/learn-python-3" target="_blank" class="resource-link">Codecademy Python</a>
-                            <a href="https://www.datacamp.com/courses/introduction-to-python-for-data-science" target="_blank" class="resource-link">Python for Data Science</a>
-                        </div>
-                    </div>
-                    <div class="roadmap-path"></div>
-                </div>
-
-                <!-- Continue with remaining nodes... -->
-                <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="3">
-                    <div class="flex items-center">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" class="node-checkbox" 
-                                   data-node="3" 
-                                   data-roadmap="{{ roadmap_type }}"
-                                   {% if user_progress.3 %}checked{% endif %}>
-                            <span class="checkmark"></span>
-                        </label>
-                        <div class="node-icon">3</div>
-                        <div class="flex-1">
-                            <h3 class="text-xl font-semibold text-white">Data Structures & Algorithms</h3>
-                            <p class="text-white/80 mt-1">Build efficient and optimized AI solutions</p>
-                        </div>
-                        <div class="svg-icon">
-                            <img src="https://www.svgrepo.com/show/472097/data-structure.svg" alt="Data Structures Icon">
-                        </div>
-                    </div>
-                    <div class="content-area">
-                        <div class="flex flex-wrap gap-2 mt-4">
-                            <a href="https://www.geeksforgeeks.org/data-structures/" target="_blank" class="resource-link">GeeksforGeeks DSA</a>
-                            <a href="https://leetcode.com/" target="_blank" class="resource-link">LeetCode</a>
-                            <a href="https://www.coursera.org/learn/data-structures-algorithms" target="_blank" class="resource-link">Coursera DSA</a>
-                        </div>
-                    </div>
-                    <div class="roadmap-path"></div>
-                </div>
-
-                <!-- Add remaining nodes 4-12 following the same pattern -->
+<div class="roadmap-container rounded-2xl p-8 space-y-8">
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="1">
+        <div class="flex items-center">
+            <div class="node-icon">1</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Foundational Math & Statistics</h3>
+                <p class="text-white/80 mt-1">Grasp the mathematical backbone of AI</p>
             </div>
-
-            <div class="text-center mt-12 text-white/70">
-                <p class="text-lg">💡 Click on each node to explore resources and check off completed topics!</p>
-                <p class="mt-2">🎯 Track your progress and stay motivated on your AI engineering journey</p>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/511394/calculator.svg" alt="Math Icon">
             </div>
         </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.khanacademy.org/math/linear-algebra" target="_blank" class="resource-link">Linear Algebra</a>
+                <a href="https://www.khanacademy.org/math/calculus-1" target="_blank" class="resource-link">Calculus</a>
+                <a href="https://www.khanacademy.org/math/statistics-probability" target="_blank" class="resource-link">Probability & Statistics</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
     </div>
 
-    <!-- Enhanced JavaScript for progress tracking -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkboxes = document.querySelectorAll('.node-checkbox');
-            const progressFill = document.getElementById('progressFill');
-            const progressText = document.getElementById('progressText');
-            
-            // Get CSRF token
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="2">
+        <div class="flex items-center">
+            <div class="node-icon">2</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Programming Fundamentals (Python)</h3>
+                <p class="text-white/80 mt-1">Master the primary language for AI</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/452091/python.svg" alt="Python Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://docs.python.org/3/" target="_blank" class="resource-link">Python Docs</a>
+                <a href="https://www.codecademy.com/learn/learn-python-3" target="_blank" class="resource-link">Codecademy Python</a>
+                <a href="https://www.datacamp.com/courses/introduction-to-python-for-data-science" target="_blank" class="resource-link">Python for Data Science</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="3">
+        <div class="flex items-center">
+            <div class="node-icon">3</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Data Structures & Algorithms</h3>
+                <p class="text-white/80 mt-1">Build efficient and optimized AI solutions</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/472097/data-structure.svg" alt="Data Structures Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.geeksforgeeks.org/data-structures/" target="_blank" class="resource-link">GeeksforGeeks DSA</a>
+                <a href="https://leetcode.com/" target="_blank" class="resource-link">LeetCode</a>
+                <a href="https://www.coursera.org/learn/data-structures-algorithms" target="_blank" class="resource-link">Coursera DSA</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="4">
+        <div class="flex items-center">
+            <div class="node-icon">4</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Machine Learning Fundamentals</h3>
+                <p class="text-white/80 mt-1">Understand the core concepts of ML</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/493605/machine-learning.svg" alt="Machine Learning Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://developers.google.com/machine-learning/crash-course" target="_blank" class="resource-link">Google ML Crash Course</a>
+                <a href="https://www.coursera.org/learn/machine-learning" target="_blank" class="resource-link">Andrew Ng's ML Course</a>
+                <a href="https://scikit-learn.org/stable/user_guide.html" target="_blank" class="resource-link">Scikit-learn Docs</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="5">
+        <div class="flex items-center">
+            <div class="node-icon">5</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Deep Learning</h3>
+                <p class="text-white/80 mt-1">Delve into neural networks and advanced models</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/487930/neural-network.svg" alt="Deep Learning Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.tensorflow.org/tutorials" target="_blank" class="resource-link">TensorFlow Tutorials</a>
+                <a href="https://pytorch.org/tutorials/" target="_blank" class="resource-link">PyTorch Tutorials</a>
+                <a href="https://www.deeplearning.ai/" target="_blank" class="resource-link">DeepLearning.AI Courses</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="6">
+        <div class="flex items-center">
+            <div class="node-icon">6</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Natural Language Processing (NLP)</h3>
+                <p class="text-white/80 mt-1">Process and understand human language</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/528343/language.svg" alt="NLP Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://huggingface.co/docs/transformers/index" target="_blank" class="resource-link">Hugging Face Transformers</a>
+                <a href="https://www.nltk.org/" target="_blank" class="resource-link">NLTK</a>
+                <a href="https://spacy.io/" target="_blank" class="resource-link">spaCy</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="7">
+        <div class="flex items-center">
+            <div class="node-icon">7</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Computer Vision (CV)</h3>
+                <p class="text-white/80 mt-1">Enable machines to 'see' and interpret images</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/486242/camera-vision.svg" alt="Computer Vision Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://opencv.org/docs/" target="_blank" class="resource-link">OpenCV</a>
+                <a href="https://pytorch.org/docs/stable/torchvision/index.html" target="_blank" class="resource-link">TorchVision</a>
+                <a href="https://www.fast.ai/2019/07/08/fastai-v3-paper/" target="_blank" class="resource-link">Fast.ai CV</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="8">
+        <div class="flex items-center">
+            <div class="node-icon">8</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">MLOps & Deployment</h3>
+                <p class="text-white/80 mt-1">Operationalize and deploy AI models</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/522513/server-line.svg" alt="Deployment Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://mlflow.org/" target="_blank" class="resource-link">MLflow</a>
+                <a href="https://www.docker.com/" target="_blank" class="resource-link">Docker</a>
+                <a href="https://kubernetes.io/" target="_blank" class="resource-link">Kubernetes</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="9">
+        <div class="flex items-center">
+            <div class="node-icon">9</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Cloud Platforms for AI</h3>
+                <p class="text-white/80 mt-1">Leverage cloud services for scalable AI</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/503460/cloud-hosting.svg" alt="Cloud Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://cloud.google.com/ai-platform" target="_blank" class="resource-link">Google Cloud AI Platform</a>
+                <a href="https://aws.amazon.com/machine-learning/" target="_blank" class="resource-link">AWS ML</a>
+                <a href="https://azure.microsoft.com/en-us/solutions/ai-machine-learning/" target="_blank" class="resource-link">Azure ML</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="10">
+        <div class="flex items-center">
+            <div class="node-icon">10</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Reinforcement Learning (Optional)</h3>
+                <p class="text-white/80 mt-1">Explore learning through trial and error</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/532321/brain.svg" alt="Reinforcement Learning Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.deepmind.com/learning-resources" target="_blank" class="resource-link">DeepMind Resources</a>
+                <a href="https://spinningup.openai.com/en/latest/" target="_blank" class="resource-link">OpenAI Spinning Up</a>
+                <a href="https://gymnasium.farama.org/" target="_blank" class="resource-link">Gymnasium</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="11">
+        <div class="flex items-center">
+            <div class="node-icon">11</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Responsible AI & Ethics</h3>
+                <p class="text-white/80 mt-1">Develop AI with ethical considerations</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/472064/ethics.svg" alt="Ethics Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://ai.google/responsibility/responsible-ai-practices/" target="_blank" class="resource-link">Google Responsible AI</a>
+                <a href="https://www.microsoft.com/en-us/ai/responsible-ai" target="_blank" class="resource-link">Microsoft Responsible AI</a>
+                <a href="https://www.ibm.com/blogs/research/category/ai-ethics/" target="_blank" class="resource-link">IBM AI Ethics</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+
+    <div class="roadmap-node rounded-xl p-6 shadow-lg" data-node="12">
+        <div class="flex items-center">
+            <div class="node-icon">12</div>
+            <div class="flex-1">
+                <h3 class="text-xl font-semibold text-white">Project Work & Portfolio</h3>
+                <p class="text-white/80 mt-1">Apply your skills to real-world problems</p>
+            </div>
+            <div class="svg-icon">
+                <img src="https://www.svgrepo.com/show/433066/project-management.svg" alt="Project Icon">
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="https://www.kaggle.com/" target="_blank" class="resource-link">Kaggle</a>
+                <a href="https://towardsdatascience.com/build-your-data-science-portfolio-a-guide-to-showcasing-your-work-and-skills-d6365a12ef65" target="_blank" class="resource-link">Portfolio Guide</a>
+                <a href="https://github.com/collections/machine-learning-projects" target="_blank" class="resource-link">ML Projects (GitHub)</a>
+            </div>
+        </div>
+        <div class="roadmap-path"></div>
+    </div>
+</div>
+
+<div class="text-center mt-12 text-white/70">
+    <p class="text-lg">💡 Click on each node to explore resources and expand content!</p>
+    <p class="mt-2">🎯 Start your AI engineering journey with comprehensive learning resources</p>
+</div>
+
+<script>
+    // Initialize roadmap functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const nodes = document.querySelectorAll('.roadmap-node');
+
+        // Create floating particles
+        createFloatingParticles();
+
+        // Animate roadmap paths on load
+        setTimeout(() => {
+            document.querySelectorAll('.roadmap-path').forEach((path, index) => {
+                setTimeout(() => {
+                    path.classList.add('animated');
+                }, index * 100);
+            });
+        }, 500);
+
+        // Add click functionality to nodes (for expanding content)
+        nodes.forEach((node, index) => {
+            node.addEventListener('click', function(e) {
+                const contentArea = node.querySelector('.content-area');
+                const isExpanded = contentArea.classList.contains('expanded');
+
+                // Close other expanded nodes
+                nodes.forEach(otherNode => {
+                    if (otherNode !== node) {
+                        otherNode.querySelector('.content-area').classList.remove('expanded');
                     }
-                }
-                return cookieValue;
-            }
-            
-            const csrftoken = getCookie('csrftoken');
-            
-            // Handle checkbox changes
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const nodeNumber = this.getAttribute('data-node');
-                    const roadmapType = this.getAttribute('data-roadmap');
-                    const completed = this.checked;
-                    
-                    // Send AJAX request to update progress
-                    fetch('/roadmaps/api/update-progress/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': csrftoken
-                        },
-                        body: JSON.stringify({
-                            roadmap_type: roadmapType,
-                            node_number: nodeNumber,
-                            completed: completed
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Update progress bar
-                            progressFill.style.width = data.progress_percentage + '%';
-                            progressText.textContent = data.completed_count + '/' + data.total_nodes;
-                            
-                            // Optional: Show success message
-                            console.log('Progress updated successfully');
-                        } else {
-                            console.error('Error updating progress:', data.error);
-                            // Revert checkbox state on error
-                            this.checked = !completed;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Revert checkbox state on error
-                        this.checked = !completed;
-                    });
                 });
+
+                // Toggle current node's content
+                contentArea.classList.toggle('expanded', !isExpanded);
             });
         });
-    </script>
-    
-    <script src="{% static 'js/main.js' %}"></script>
+
+        function createFloatingParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const numberOfParticles = 30; // Adjust as needed
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.width = `${Math.random() * 5 + 5}px`; /* 5 to 10px */
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5 to 10 seconds
+                particle.style.animationDelay = `${Math.random() * 6}s`; // Stagger animation start
+                particlesContainer.appendChild(particle);
+            }
+        }
+    });
+</script>
 </body>
 </html>
